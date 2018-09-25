@@ -71,6 +71,41 @@
             </form>
         <!--END MODAL ADD-->
 		
+        <!-- MODAL ADD -->
+            <form method="post" id="form_update">
+            <div class="modal fade" id="modal_update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update <?php if(isset($title)){	echo ucwords(strtolower($title));}?></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label">Nama</label>
+                            <div class="col-md-10">
+                              <input type="text" name="nama" id="nama" class="form-control" placeholder="Nama" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label">Alamat</label>
+                            <div class="col-md-10">
+                              <input type="text" name="alamat" id="alamat" class="form-control" placeholder="Alamat" required>
+                            </div>
+                        </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input role="button" type="submit" id="btn_save" name="submit" class="btn btn-primary" value="submit">
+                  </div>
+                </div>
+              </div>
+            </div>
+            </form>
+        <!--END MODAL ADD-->		
+		
 		<!--MODAL DELETE-->
          <form>
             <div class="modal fade" id="modal_delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -89,6 +124,30 @@
                     <input type="hidden" name="id" id="id" class="form-control">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
                     <input role="button" type="submit" id="btn_delete" name="submit" class="btn btn-danger" value="submit">
+                  </div>
+                </div>
+              </div>
+            </div>
+            </form>
+        <!--END MODAL DELETE-->		
+		
+		<!--MODAL DELETE-->
+         <form>
+            <div class="modal fade" id="modal_error" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Error <?php if(isset($title)){	echo ucwords(strtolower($title));}?></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                       
+                  </div>
+                  <div class="modal-footer">
+                    <input type="hidden" name="id" id="id" class="form-control">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                   </div>
                 </div>
               </div>
@@ -116,7 +175,7 @@
 					for(i=0; i<list.header.length; i++){
 						html += '<tr>';
 						for(j=0; j<list.header[i].length; j++){
-							html += '<td class="'+ textClasses(list.header[i][j].classes)+ '" ';     
+							html += '<td class="align-middle '+ textClasses(list.header[i][j].classes)+ '" ';     
 							if(list.header[i][j].rowspan != null){
 								html += 'rowspan="'+list.header[i][j].rowspan+'" ';	
 							}
@@ -129,7 +188,7 @@
 						}
 						if(list.editable == true || list.deletable == true){
 							if(i==0){
-								html += '<td class="text-center font-weight-bold" rowspan="'+list.header.length+'" colspan="2">Action';
+								html += '<td class="align-middle text-center font-weight-bold" rowspan="'+list.header.length+'" colspan="2">Action';
 								html += '</td>'; 
 							}
 						}
@@ -145,21 +204,32 @@
 							if(list.body[i][j].classes.includes("hidden") == true){
 								
 							}else{
-								html += '<td class="'+ textClasses(list.body[i][j].classes) +'">';
+								html += '<td class="'+ textClasses(list.body[i][j].classes) +'"';
+								if(list.body[i][j].rowspan != null){
+									html += 'rowspan="'+list.body[i][j].rowspan+'" ';	
+								}
+								if(list.body[i][j].colspan != null){
+									html += 'colspan="'+list.body[i][j].colspan+'" ';	
+								}
+								html += '>';
 								html += list.body[i][j].value;
-								html += '</td>';								
+								html += '</td>';
 							}
 						}
-						if(list.editable == true){
-							html += '<td class="text-center font-weight-bold">';
-							html += '<a class="item-edit" href="javascript:void(0);" data-toggle="modal" data-target="#modal_edit" title="edit"><i style="font-size: 16px;" class="fa fa-edit"></i></a>';
-							html += '</td>';
-						}
-						if(list.deletable == true){
-							html += '<td class="text-center font-weight-bold">';
-							html += '<a class="item-delete" id="'+list.body[i][0].value+'" href="javascript:void(0);" title="delete"><i style="font-size: 16px;" class="fa fa-trash"></i></a>';
-							html += '</td>';
-						}						
+						if(list.body.length == 1 & list.body[i][0].classes.includes("empty") == true){
+							
+						}else{
+							if(list.editable == true){
+								html += '<td class="text-center font-weight-bold">';
+								html += '<a class="item-update" id="'+list.body[i][0].value+'" href="javascript:void(0);" data-toggle="modal" data-target="#modal_edit" title="edit"><i style="font-size: 16px;" class="fa fa-pencil"></i></a>';
+								html += '</td>';
+							}
+							if(list.deletable == true){
+								html += '<td class="text-center font-weight-bold">';
+								html += '<a class="item-delete" id="'+list.body[i][0].value+'" href="javascript:void(0);" title="delete"><i style="font-size: 16px;" class="fa fa-trash"></i></a>';
+								html += '</td>';
+							}								
+						}					
 						html += '</tr>';
 					}					
 					html += '</tbody>';
@@ -194,14 +264,42 @@
                 url  : "<?php echo site_url($class.'/insert')?>",
                 dataType : "JSON",
 				data : JSON.parse(datainput),
-                success: function(data){					
+                success: function(data){
+					console.log(data);
                     $('#modal_add').modal('hide');
-					$("#form_add")[0].reset();
                     show_product();
+					if(data.status == true){
+						var i;
+						var error_info = '';
+						for(i=0; i<data.info.length; i++){
+							error_info += data.info[i]+'<br>';
+						}
+						$('#modal_error .modal-body').html('<strong>'+error_info+'</strong>');
+						$('#modal_error').modal('show');
+					}else{
+						$("#form_add")[0].reset();
+					}
                 }
             });
             return false;
         });	
+		
+		//get data for delete record
+        $('#show_data').on('click','.item-update',function(){
+            var id = $(this).attr("id");
+            $.ajax({
+                type : "POST",
+                url  : "<?php echo site_url($class.'/update')?>",
+                dataType : "JSON",
+                data : {id:id},
+                success: function(data){
+                    $('#modal_update').modal('show');
+                }
+            });
+            return false;
+        });		
+		
+		
 
 		//get data for delete record
         $('#show_data').on('click','.item-delete',function(){
