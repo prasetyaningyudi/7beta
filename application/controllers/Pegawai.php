@@ -86,10 +86,10 @@ class Pegawai extends CI_Controller {
 				$error_info[] = 'Invalid Name';
 				$error_status = true;
 			}
-			if($_POST['alamat'] != 'yudi'){
+/* 			if($_POST['alamat'] != 'yudi'){
 				$error_info[] = 'Invalid Alamat';
 				$error_status = true;
-			}
+			} */
 			
 			if($error_status == true){
 				$this->data['error'] = (object) array (
@@ -106,15 +106,100 @@ class Pegawai extends CI_Controller {
 				$result = $this->pegawai_model->insert($this->data['insert']);
 				echo json_encode($result);				
 			}
+		}else{
+			$fields = array();
+			$fields[] = (object) array(
+				'type' 		=> 'text',
+				'label' 	=> 'Nama',
+				'name' 		=> 'nama',
+				'value' 	=> '',
+				'classes' 	=> 'required',
+			);
+			$fields[] = (object) array(
+				'type' 		=> 'text',
+				'label' 	=> 'Alamat',
+				'name' 		=> 'alamat',
+				'value' 	=> '',
+				'classes' 	=> 'required',
+			);												
+
+			$this->data['insert'] = (object) array (
+				'type'  	=> 'modal',
+				'classes'  	=> '',
+				'fields'  	=> $fields,
+			);	
+			echo json_encode($this->data['insert']);				
 		}
 	}
 	
 	public function update($id = null){
-		$filter = array();
-		$filter[] = "ID = ". $_POST['id'];
-		$this->data['result'] = $this->pegawai_model->get($filter);
-		//output to json format
-		echo json_encode($this->data['result']);
+		if(isset($_POST['submit'])){
+			//validation example
+			$error_info = array();
+			$error_status = false;
+			if($_POST['nama'] != 'yudi'){
+				$error_info[] = 'Invalid Name';
+				$error_status = true;
+			}
+/* 			if($_POST['alamat'] != 'yudi'){
+				$error_info[] = 'Invalid Alamat';
+				$error_status = true;
+			} */
+			
+			if($error_status == true){
+				$this->data['error'] = (object) array (
+					'type'  	=> 'error',
+					'status'	=> $error_status,
+					'info'	=> $error_info,
+				);				
+				echo json_encode($this->data['error']);
+			}else{
+				$this->data['update'] = array(
+						'NAMA' => $_POST['nama'],
+						'ALAMAT' => $_POST['alamat'],
+					);
+				$result = $this->pegawai_model->update($this->data['update'], $_POST['id']);
+				echo json_encode($result);				
+			}			
+		}else{
+			$filter = array();
+			$filter[] = "ID = ". $_POST['id'];
+			$this->data['result'] = $this->pegawai_model->get($filter);
+			foreach($this->data['result'] as $value){
+				$r_id 	= $value->ID;
+				$r_nama = $value->NAMA;
+				$r_alamat = $value->ALAMAT;
+			}
+			$fields = array();
+			$fields[] = (object) array(
+				'type' 		=> 'hidden',
+				'label' 	=> 'id',
+				'name' 		=> 'id',
+				'value' 	=> $r_id,
+				'classes' 	=> '',
+			);			
+			$fields[] = (object) array(
+				'type' 		=> 'text',
+				'label' 	=> 'Nama',
+				'name' 		=> 'nama',
+				'value' 	=> $r_nama,
+				'classes' 	=> 'required',
+			);
+			$fields[] = (object) array(
+				'type' 		=> 'text',
+				'label' 	=> 'Alamat',
+				'name' 		=> 'alamat',
+				'value' 	=> $r_alamat,
+				'classes' 	=> 'required',
+			);												
+
+			$this->data['insert'] = (object) array (
+				'type'  	=> 'modal',
+				'classes'  	=> '',
+				'fields'  	=> $fields,
+			);	
+			echo json_encode($this->data['insert']);
+		}
 	}
 	
 	public function delete(){

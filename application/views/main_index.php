@@ -2,11 +2,11 @@
 	<div class="container-fluid">
 	<div class="title row align-items-center">
 		<div class="col-6">
-			Analytics
+			Breadcrum
 		</div>		
 		
 		<div class="col-6 text-right font-weight-bold">
-			<div class="button-input" style="float:right;text-align:center;font-size:16px"><a href="javascript:void(0);" data-toggle="modal" data-target="#modal_add" title="add"><i style="font-size: 18px;" class="fa fa-plus"></i><br>ADD</a></div>
+			<div class="button-input" id="button-input" style="float:right;text-align:center;font-size:16px"><a href="javascript:void(0);" data-toggle="modal" data-target="#modal_add" title="add"><i style="font-size: 18px;" class="fa fa-plus"></i><br>ADD</a></div>
 		</div>	
 	</div>	
 	</div>	
@@ -37,7 +37,7 @@
 </div>
 
         <!-- MODAL ADD -->
-            <form method="post" id="form_add">
+            <form method="post" id="form_add" novalidate> 
             <div class="modal fade" id="modal_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
@@ -48,18 +48,7 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Nama</label>
-                            <div class="col-md-10">
-                              <input type="text" name="nama" id="nama" class="form-control" placeholder="Nama" required>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Alamat</label>
-                            <div class="col-md-10">
-                              <input type="text" name="alamat" id="alamat" class="form-control" placeholder="Alamat" required>
-                            </div>
-                        </div>
+
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -71,7 +60,7 @@
             </form>
         <!--END MODAL ADD-->
 		
-        <!-- MODAL ADD -->
+        <!-- MODAL UPDATE -->
             <form method="post" id="form_update">
             <div class="modal fade" id="modal_update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-lg" role="document">
@@ -83,22 +72,11 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Nama</label>
-                            <div class="col-md-10">
-                              <input type="text" name="nama" id="nama" class="form-control" placeholder="Nama" required>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label">Alamat</label>
-                            <div class="col-md-10">
-                              <input type="text" name="alamat" id="alamat" class="form-control" placeholder="Alamat" required>
-                            </div>
-                        </div>
+				  
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <input role="button" type="submit" id="btn_save" name="submit" class="btn btn-primary" value="submit">
+                    <input role="button" type="submit" id="btn_update" name="submit" class="btn btn-primary" value="submit">
                   </div>
                 </div>
               </div>
@@ -240,6 +218,38 @@
 			
         }
 		
+		
+		//get data for input record
+         $('#button-input').on('click',function(){
+            $.ajax({
+                type : "POST",
+                url  : "<?php echo site_url($class.'/insert')?>",
+                dataType : "JSON",
+                success: function(data){
+					console.log(data.fields);
+					var html = '';
+					var i;
+					for(i=0;i<data.fields.length;i++){
+						html += '<div class="form-group row">';
+						html += '<label class="col-md-2 col-form-label">'+data.fields[i].label+'</label>';
+						html += '<div class="col-md-10">';
+						
+						if(data.fields[i].type == 'text'){
+							html += '<input type="text" name="'+data.fields[i].name+'" id="'+data.fields[i].name+'" class="form-control" placeholder="'+data.fields[i].label+'" ';					
+							html += fieldClasses(data.fields[i].classes);
+							html += '>';
+						}
+						
+						html += '</div>';
+						html += '</div>';
+					}
+					$('#modal_add .modal-body').html(html);
+                    $('#modal_add').modal('show');
+                }
+            });
+            return false;
+        });			
+		
         $('#btn_save').on('click',function(){
 			var abc = $("#form_add").find( "[name]" );
 			var datainput='{';
@@ -293,13 +303,74 @@
                 dataType : "JSON",
                 data : {id:id},
                 success: function(data){
+					var html = '';
+					var i;
+					for(i=0;i<data.fields.length;i++){
+						html += '<div class="form-group row">';
+						if(data.fields[i].type != 'hidden'){
+							html += '<label class="col-md-2 col-form-label">'+data.fields[i].label+'</label>';
+						}
+						html += '<div class="col-md-10">';
+						
+						if(data.fields[i].type == 'text'){
+							html += '<input type="text" name="'+data.fields[i].name+'" id="'+data.fields[i].name+'" value="'+data.fields[i].value+'" class="form-control" placeholder="'+data.fields[i].label+'" ';					
+							html += fieldClasses(data.fields[i].classes);
+							html += '>';
+						}else if(data.fields[i].type == 'hidden'){
+							html += '<input type="hidden" name="'+data.fields[i].name+'" id="'+data.fields[i].name+'" value="'+data.fields[i].value+'" class="form-control" ';					
+							html += fieldClasses(data.fields[i].classes);
+							html += '>';
+						}
+						
+						html += '</div>';
+						html += '</div>';
+					}
+					$('#modal_update .modal-body').html(html);
                     $('#modal_update').modal('show');
                 }
             });
             return false;
         });		
 		
-		
+        $('#btn_update').on('click',function(){
+			var abc = $("#form_update").find( "[name]" );
+			var datainput='{';
+			var i= 0;
+			$(abc).each(function(index,element){
+				if(i != 0){
+					datainput += ',';
+				}
+				datainput += '"'+element.name+'"';
+				datainput += ':';
+				datainput += '"'+element.value+'"';
+				i++;
+			});
+			datainput += '}';
+			console.log(datainput);
+            $.ajax({
+                type : "POST",
+                url  : "<?php echo site_url($class.'/update')?>",
+                dataType : "JSON",
+				data : JSON.parse(datainput),
+                success: function(data){
+					console.log(data);
+                    $('#modal_update').modal('hide');
+                    show_product();
+					if(data.status == true){
+						var i;
+						var error_info = '';
+						for(i=0; i<data.info.length; i++){
+							error_info += data.info[i]+'<br>';
+						}
+						$('#modal_error .modal-body').html('<strong>'+error_info+'</strong>');
+						$('#modal_error').modal('show');
+					}else{
+						//$("#form_add")[0].reset();
+					}
+                }
+            });
+            return false;
+        });			
 
 		//get data for delete record
         $('#show_data').on('click','.item-delete',function(){
@@ -336,6 +407,18 @@
 				tabled += ' table-hover';
 			}
 			return tabled;
+		}
+		
+		
+		function fieldClasses(value){
+			var required;
+			if(value.includes("required") == true){
+				required = 'required';
+			}else{
+				required = '';
+			}
+			
+			return required;
 		}
 		
 		function textClasses(value){
