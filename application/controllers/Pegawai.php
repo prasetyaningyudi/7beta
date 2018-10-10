@@ -40,7 +40,7 @@ class Pegawai extends CI_Controller {
 						(object) array( 'classes' => ' bold align-left ', 'value' => $no_body+1 ),
 						(object) array( 'classes' => ' align-left ', 'value' => $value->NAMA ),
 						(object) array( 'classes' => ' align-left ', 'value' => $value->ALAMAT ),
-						(object) array( 'classes' => ' align-left ', 'value' => $value->STATUS ),
+						(object) array( 'classes' => ' align-center ', 'value' => $value->STATUS ),
 					);
 					$no_body++;
 				}
@@ -55,7 +55,7 @@ class Pegawai extends CI_Controller {
 			array (
 				(object) array ('rowspan' => 2, 'classes' => 'bold align-left capitalize', 'value' => 'No'),
 				(object) array ('colspan' => 2, 'classes' => 'bold align-center capitalize', 'value' => 'data'),					
-				(object) array ('rowspan' => 2, 'classes' => 'bold align-left capitalize', 'value' => 'status'),			
+				(object) array ('rowspan' => 2, 'classes' => 'bold align-center capitalize', 'value' => 'status'),			
 			),
 			array (
 				(object) array ('classes' => 'bold align-center capitalize', 'value' => 'nama'),
@@ -82,11 +82,11 @@ class Pegawai extends CI_Controller {
 			//validation example
 			$error_info = array();
 			$error_status = false;
-			if($_POST['nama'] != 'yudi'){
+/* 			if($_POST['nama'] != 'yudi'){
 				$error_info[] = 'Invalid Name';
 				$error_status = true;
 			}
-/* 			if($_POST['alamat'] != 'yudi'){
+			if($_POST['alamat'] != 'yudi'){
 				$error_info[] = 'Invalid Alamat';
 				$error_status = true;
 			} */
@@ -116,7 +116,7 @@ class Pegawai extends CI_Controller {
 				'classes' 	=> 'required',
 			);
 			$fields[] = (object) array(
-				'type' 		=> 'text',
+				'type' 		=> 'textarea',
 				'label' 	=> 'Alamat',
 				'name' 		=> 'alamat',
 				'value' 	=> '',
@@ -132,7 +132,7 @@ class Pegawai extends CI_Controller {
 		}
 	}
 	
-	public function update($id = null){
+	public function update(){
 		if(isset($_POST['submit'])){
 			//validation example
 			$error_info = array();
@@ -141,10 +141,10 @@ class Pegawai extends CI_Controller {
 				$error_info[] = 'Invalid Name';
 				$error_status = true;
 			}
-/* 			if($_POST['alamat'] != 'yudi'){
+			if($_POST['alamat'] != 'yudi'){
 				$error_info[] = 'Invalid Alamat';
 				$error_status = true;
-			} */
+			}
 			
 			if($error_status == true){
 				$this->data['error'] = (object) array (
@@ -203,11 +203,11 @@ class Pegawai extends CI_Controller {
 	}
 	
 	public function delete(){
-			$this->data['delete'] = array(
-					'ID' => $_POST['id'],
-				);		
-			$result = $this->pegawai_model->delete($this->data['delete']);
-			echo json_encode($result);		
+		$this->data['delete'] = array(
+				'ID' => $_POST['id'],
+			);		
+		$result = $this->pegawai_model->delete($this->data['delete']);
+		echo json_encode($result);		
 	}
 	
 }
