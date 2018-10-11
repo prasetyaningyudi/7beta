@@ -246,13 +246,72 @@ body {
 	font-weight: 600;
 }
 
-.button-input:hover a{
+
+/* toolbar */
+.button-toolbar{
+	margin-left: 15px;	
+}
+
+.button-toolbar:hover a{
 	color: #4F6C89;
 	text-decoration: none;
 }
 
-.button-input a{
+.button-toolbar a{
 	display: block;
-	color: #35475E;
+	color: #35475E;	
+}
+
+.button-input:hover a{
+
+}
+
+.button-input a{
+
+}
+
+/* filter */
+.wrapper{
+	position:relative;
+}
+#filter-sidebar {
+    position: fixed;
+    right: 0;
+    top: 127px;
+	height: 100vh;
+	overflow-x :hidden;
+	width: 15%;
+	z-index: -1;
+	
+}
+
+#filter-content{
+	background: white;
+	border-left: solid 1px #ABC7E0;
+	border-top: solid 1px #ABC7E0;
+	height: 100%;
+	margin-right: -100%;
+	position:absolute;
+	top: 0px;
+	right: 0px;
+	width: 100%;
+}
+.filter-dialog{
+	width: 100%;
+	height: 100%;
+}
+.filter-header{
+	font-size: 16px;
+	font-weight: 500;
+	padding: 10px;
+	border-bottom: 1px solid #e9ecef; 
+}
+.filter-body{
+	padding: 10px;
+}
+
+.filter-footer{
+	padding: 10px;	
+	border-top: 1px solid #e9ecef; 
 }
 

@@ -1,44 +1,77 @@
-<div class="main-content">
-	<div class="container-fluid">
-	<div class="title row align-items-center">
-		<div class="col-6">
-			Breadcrum
-		</div>		
-		
-		<div class="col-6 text-right font-weight-bold">
-			<div class="button-input" id="button-input" style="float:right;text-align:center;font-size:16px">
-			<a href="javascript:void(0);" data-toggle="modal" data-target="#modal_add" title="add">
-				<i style="font-size: 18px;" class="fa fa-plus"></i><br>ADD
-			</a>
-			</div>
+<div class="wrapper">
+	<div class="main-content">
+		<div class="container-fluid">
+		<div class="title row align-items-center">
+			<div class="col-6">
+				Breadcrum
+			</div>		
+			
+			<div class="col-6 text-right font-weight-bold">
+				<div class="filters">
+	
+				</div>		
+			
+				<div class="button-input button-toolbar" id="button-input" style="float:right;text-align:center;font-size:16px">
+				<a href="javascript:void(0);" data-toggle="modal" data-target="#modal-add" title="add">
+					<i style="font-size: 18px;" class="fa fa-plus"></i><br>ADD
+				</a>
+				</div>			
+			</div>	
 		</div>	
-	</div>	
-	</div>	
+		</div>
 		
-	<div class="main">
-		<div class="widget">
-			<div class="title">
-				<?php 
-					if(isset($subtitle)){
-						echo ucwords(strtolower($subtitle)).' ';
-					}else{
-						echo '';
-					} 
-					if(isset($title)){
-						echo ucwords(strtolower($title));
-					}else{
-						echo 'Untitled';
-					}
-				?>			
-			</div>
-			<div class="chart">
-				<div class="container-fluid mt-4 pb-4" id="show-data">
-
+		<div class="main">
+			<div class="widget">
+				<div class="title">
+					<?php 
+						if(isset($subtitle)){
+							echo ucwords(strtolower($subtitle)).' ';
+						}else{
+							echo '';
+						} 
+						if(isset($title)){
+							echo ucwords(strtolower($title));
+						}else{
+							echo 'Untitled';
+						}
+					?>			
 				</div>
+				
+				<div class="chart">
+					<div class="container-fluid mt-4 pb-4" id="show-data">
+
+					</div>
+				</div>
+			</div>	
+			</div>	
+	</div>
+
+	<div id="filter-sidebar">
+		<div id="filter-content">
+			<div class="filter-dialog">	
+				<form method="post" id="form-filter"> 
+				<div class="filter-header row align-middle">
+					<div class="col-10 filter-title">Filter Data</div>
+					<button type="button" class="col-2 close button-filter-close">
+					  <span aria-hidden="true">&times;</span>
+					</button>				
+				</div>	
+				<div class="filter-body">
+				
+				</div>	
+				<div class="filter-footer row align-middle">
+					<div class="col-6">
+						<input role="button" type="reset" id="button-reset" name="reset" class="btn-block btn btn-outline-secondary" value="reset">
+					</div>					
+					<div class="col-6">
+						<input role="button" type="submit" id="button-submit-filter" name="submit" class="btn-block btn btn-outline-primary align-right" value="submit">
+					</div>
+				</div>
+				</form>
 			</div>
 		</div>
-	</div>	
-</div>
+	</div>		
+</div>		
 
 <!-- MODAL ADD -->
 <form method="post" id="form-add"> 
@@ -140,14 +173,17 @@
 			
 <script src="<?php echo base_url(); ?>assets/js/table.js"></script>	
 <script src="<?php echo base_url(); ?>assets/js/form.js"></script>	
+
 		
 <script type="text/javascript">
 $(document).ready(function(){
 	//show data
 	show_data('<?php echo site_url($class); ?>');	
 	//insert update delete data
-	crud_data('<?php echo site_url($class); ?>');			
+	crud_data('<?php echo site_url($class); ?>');
 });
 </script>
+
+
 
 	

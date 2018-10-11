@@ -24,7 +24,24 @@ class Pegawai extends CI_Controller {
 	}
 	
 	public function list(){
-		$data = $this->pegawai_model->get();
+		$filters = array();
+		$r_nama = '';
+		$r_alamat = '';
+		if(isset($_POST['submit'])){
+			if ($_POST['nama'] != '') {
+				$filters[] = "nama = '" . $_POST['nama'] . "'";
+				$r_nama = $_POST['nama'];
+			}
+			
+			if ($_POST['alamat'] != '') {
+				$filters[] = "alamat = '" . $_POST['alamat'] . "'";
+				$r_alamat = $_POST['alamat'];
+			}
+		}
+		
+		$data = $this->pegawai_model->get($filters);
+		
+		//var_dump($data);
 
 		$no_body = 0;
 		$body= array();
@@ -62,13 +79,29 @@ class Pegawai extends CI_Controller {
 				(object) array ('classes' => 'bold align-center capitalize', 'value' => 'alamat'),				
 			)			
 		);
+		
+		$filter = array();
+		$filter[] = (object) array(
+			'type' 		=> 'text',
+			'label' 	=> 'Nama',
+			'name' 		=> 'nama',
+			'value' 	=> $r_nama,
+			'classes' 	=> '',
+		);
+		$filter[] = (object) array(
+			'type' 		=> 'textarea',
+			'label' 	=> 'Alamat',
+			'name' 		=> 'alamat',
+			'value' 	=> $r_alamat,
+			'classes' 	=> '',
+		);			
 
 		$this->data['list'] = (object) array (
 			'type'  	=> 'table',
 			'editable'	=> true,
 			'deletable'	=> true,
 			'classes'  	=> 'striped bordered hover',
-			'filters'  	=> null,
+			'filters'  	=> $filter,
 			'header'  	=> $header,
 			'body'  	=> $body,
 			'footer'  	=> null,
@@ -137,14 +170,14 @@ class Pegawai extends CI_Controller {
 			//validation example
 			$error_info = array();
 			$error_status = false;
-			if($_POST['nama'] != 'yudi'){
+/* 			if($_POST['nama'] != 'yudi'){
 				$error_info[] = 'Invalid Name';
 				$error_status = true;
 			}
 			if($_POST['alamat'] != 'yudi'){
 				$error_info[] = 'Invalid Alamat';
 				$error_status = true;
-			}
+			} */
 			
 			if($error_status == true){
 				$this->data['error'] = (object) array (

@@ -177,9 +177,9 @@ function fieldData(data){
 		html += fieldClasses(data.classes);
 		html += '>';
 	}else if(data.type == 'textarea'){
-		html += '<textarea name="'+data.name+'" id="'+data.name+'" value="'+data.value+'" class="form-control" rows="4" placeholder="'+data.label+'" ';					
+		html += '<textarea name="'+data.name+'" id="'+data.name+'" class="form-control" rows="4" placeholder="'+data.label+'" ';					
 		html += fieldClasses(data.classes);
-		html += '></textarea>';
+		html += '>'+data.value+'</textarea>';
 	}else if(data.type == 'hidden'){
 		html += '<input type="hidden" name="'+data.name+'" id="'+data.name+'" value="'+data.value+'" class="form-control" ';	
 		html += fieldClasses(data.classes);
