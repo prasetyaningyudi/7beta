@@ -33,15 +33,43 @@ $('#button-save').on('click',function(){
 	var datainput='{';
 	var i= 0;
 	$(field).each(function(index,element){
-		if(i != 0){
-			datainput += ',';
-		}
-		datainput += '"'+element.name+'"';
-		datainput += ':';
-		datainput += '"'+element.value+'"';
+		if($(this).is(':checkbox')){
+			if($(this).is( ':checked' )){
+				datainput += '"'+element.name+'"';
+				datainput += ':';
+				datainput += '"'+element.value+'"';
+				if(i != field.length -1 ){
+					datainput += ',';
+				}
+			}else{
+				datainput += '"'+element.name+'"';
+				datainput += ':';				
+				datainput += '"off"';
+				if(i != field.length -1 ){
+					datainput += ',';
+				}
+			}
+		}else if($(this).is(':radio')){
+			if($(this).is( ':checked' )){
+				datainput += '"'+element.name+'"';
+				datainput += ':';
+				datainput += '"'+element.value+'"';
+				if(i != field.length -1 ){
+					datainput += ',';
+				}
+			}
+		}else{
+			datainput += '"'+element.name+'"';
+			datainput += ':';
+			datainput += '"'+element.value+'"';
+			if(i != field.length -1 ){
+				datainput += ',';
+			}
+		}		
 		i++;
 	});
 	datainput += '}';
+	//console.log(datainput);
 
 	$.ajax({
 		type : "POST",
@@ -60,7 +88,7 @@ $('#button-save').on('click',function(){
 				$('#modal-error .modal-body').html('<strong>'+error_info+'</strong>');
 				$('#modal-error').modal('show');
 			}else{
-				$("#form-add")[0].reset();
+				$("#form-add").trigger("reset");
 			}
 		}
 	});
@@ -101,22 +129,51 @@ $('#button-update').on('click',function(){
 	var datainput='{';
 	var i= 0;
 	$(field).each(function(index,element){
-		if(i != 0){
-			datainput += ',';
-		}
-		datainput += '"'+element.name+'"';
-		datainput += ':';
-		datainput += '"'+element.value+'"';
+		if($(this).is(':checkbox')){
+			if($(this).is( ':checked' )){
+				datainput += '"'+element.name+'"';
+				datainput += ':';
+				datainput += '"'+element.value+'"';
+				if(i != field.length -1 ){
+					datainput += ',';
+				}
+			}else{
+				datainput += '"'+element.name+'"';
+				datainput += ':';				
+				datainput += '"off"';
+				if(i != field.length -1 ){
+					datainput += ',';
+				}
+			}
+		}else if($(this).is(':radio')){
+			if($(this).is( ':checked' )){
+				datainput += '"'+element.name+'"';
+				datainput += ':';
+				datainput += '"'+element.value+'"';
+				if(i != field.length -1 ){
+					datainput += ',';
+				}
+			}
+		}else{
+			datainput += '"'+element.name+'"';
+			datainput += ':';
+			datainput += '"'+element.value+'"';
+			if(i != field.length -1 ){
+				datainput += ',';
+			}
+		}		
 		i++;
 	});
 	datainput += '}';
+	
+	//console.log(datainput);
 	$.ajax({
 		type : "POST",
 		url  : targeturl+'/update',
 		dataType : "JSON",
 		data : JSON.parse(datainput),
 		success: function(data){
-			console.log(data);
+			//console.log(data);
 			$('#modal-update').modal('hide');
 			show_data(targeturl+'/list');
 			if(data.status == true){
@@ -159,31 +216,77 @@ $('#show-data').on('click','.item-delete',function(){
 });
 
 function fieldData(data){
+	//console.log(data);
 	var html = '';
 	if(data.type == 'text'){
-		html += '<input type="text" name="'+data.name+'" id="'+data.name+'" value="'+data.value+'" class="form-control" placeholder="'+data.label+'" ';					
+		html += '<input type="text" name="'+data.name+'" id="'+data.name+'" value="'+data.value+'" class="form-control" placeholder="'+data.placeholder+'" ';					
 		html += fieldClasses(data.classes);
 		html += '>';
 	}else if(data.type == 'email'){
-		html += '<input type="email" name="'+data.name+'" id="'+data.name+'" value="'+data.value+'" class="form-control" placeholder="'+data.label+'" ';					
+		html += '<input type="email" name="'+data.name+'" id="'+data.name+'" value="'+data.value+'" class="form-control" placeholder="'+data.placeholder+'" ';					
 		html += fieldClasses(data.classes);
 		html += '>';
 	}else if(data.type == 'password'){
-		html += '<input type="password" name="'+data.name+'" id="'+data.name+'" value="'+data.value+'" class="form-control" placeholder="'+data.label+'" ';					
+		html += '<input type="password" name="'+data.name+'" id="'+data.name+'" value="'+data.value+'" class="form-control" placeholder="'+data.placeholder+'" ';					
 		html += fieldClasses(data.classes);
 		html += '>';
 	}else if(data.type == 'date'){
-		html += '<input type="date" name="'+data.name+'" id="'+data.name+'" value="'+data.value+'" class="form-control" placeholder="'+data.label+'" ';					
+		html += '<input type="date" name="'+data.name+'" id="'+data.name+'" value="'+data.value+'" class="form-control" placeholder="'+data.placeholder+'" ';					
 		html += fieldClasses(data.classes);
 		html += '>';
 	}else if(data.type == 'textarea'){
-		html += '<textarea name="'+data.name+'" id="'+data.name+'" class="form-control" rows="4" placeholder="'+data.label+'" ';					
+		html += '<textarea name="'+data.name+'" id="'+data.name+'" class="form-control" rows="4" placeholder="'+data.placeholder+'" ';					
 		html += fieldClasses(data.classes);
 		html += '>'+data.value+'</textarea>';
 	}else if(data.type == 'hidden'){
 		html += '<input type="hidden" name="'+data.name+'" id="'+data.name+'" value="'+data.value+'" class="form-control" ';	
 		html += fieldClasses(data.classes);
 		html += '></textarea>';
+	}else if(data.type == 'select'){
+		html += '<select name="'+data.name+'" id="'+data.name+'" class="form-control custom-select" ';	
+		html += fieldClasses(data.classes);
+		html += '>';
+		html += '<option value="">'+data.placeholder+'</option>';
+		var i;
+		for(i=0;i<data.options.length;i++){
+			//console.log(data.value);
+			if(data.value == data.options[i].value){
+				html += '<option value="'+data.options[i].value+'" selected>'+data.options[i].label+'</option>';
+			}else{
+				html += '<option value="'+data.options[i].value+'">'+data.options[i].label+'</option>';
+			}
+		}
+		html += '</select>';
+	}else if(data.type == 'radio'){	
+		var i;
+		for(i=0;i<data.options.length;i++){
+			html += '<div class="form-check">';
+			html += '<input class="form-check-input" type="radio" name="'+data.name+'" id="'+data.name+i+'" value="'+data.options[i].value+'" ';			
+			if(data.value == data.options[i].value){
+				html += 'checked>';
+			}else{
+				html += '>';
+			}
+			html += '<label class="form-check-label" for="'+data.name+i+'">';
+			html += data.options[i].label;
+			html += '</label>';
+			html += '</div>';
+		}
+	}else if(data.type == 'checkbox'){	
+		var i;
+		for(i=0;i<data.options.length;i++){
+			html += '<div class="form-check">';
+			html += '<input class="form-check-input" type="checkbox" name="'+data.name+'" id="'+data.name+i+'" ';
+			if(data.value == 'on'){
+				html += 'checked>';
+			}else{
+				html += '>';
+			}
+			html += '<label class="form-check-label" for="'+data.name+i+'">';
+			html += data.options[i].label;
+			html += '</label>';
+			html += '</div>';
+		}
 	}
 	return html;
 }

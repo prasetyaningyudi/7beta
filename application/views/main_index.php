@@ -75,7 +75,7 @@
 
 <!-- MODAL ADD -->
 <form method="post" id="form-add"> 
-<div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-lg" role="document">
 	<div class="modal-content">
 	  <div class="modal-header">
@@ -88,7 +88,7 @@
 
 	  </div>
 	  <div class="modal-footer">
-		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		<input role="button" type="reset" id="button-reset" name="reset" class="btn btn-secondary" value="reset">
 		<input role="button" type="submit" id="button-save" name="submit" class="btn btn-primary" value="submit">
 	  </div>
 	</div>
@@ -99,7 +99,7 @@
 
 <!-- MODAL UPDATE -->
 <form method="post" id="form-update">
-<div class="modal fade" id="modal-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal-update" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-lg" role="document">
 	<div class="modal-content">
 	  <div class="modal-header">

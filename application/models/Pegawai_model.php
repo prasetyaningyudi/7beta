@@ -23,7 +23,7 @@ class Pegawai_model extends CI_Model {
 		$query = $this->db->query($sql);
 		$result = $query->result();
 		//var_dump($result); die;	
-		return $result;	
+		return $result;
 	}
 	
 	public function insert($data){

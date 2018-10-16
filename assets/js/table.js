@@ -119,12 +119,39 @@ $('#button-submit-filter').on('click',function(){
 	var datainput='{';
 	var i= 0;
 	$(field).each(function(index,element){
-		if(i != 0){
-			datainput += ',';
-		}
-		datainput += '"'+element.name+'"';
-		datainput += ':';
-		datainput += '"'+element.value+'"';
+		if($(this).is(':checkbox')){
+			if($(this).is( ':checked' )){
+				datainput += '"'+element.name+'"';
+				datainput += ':';
+				datainput += '"'+element.value+'"';
+				if(i != field.length -1 ){
+					datainput += ',';
+				}
+			}else{
+				datainput += '"'+element.name+'"';
+				datainput += ':';				
+				datainput += '"off"';
+				if(i != field.length -1 ){
+					datainput += ',';
+				}
+			}
+		}else if($(this).is(':radio')){
+			if($(this).is( ':checked' )){
+				datainput += '"'+element.name+'"';
+				datainput += ':';
+				datainput += '"'+element.value+'"';
+				if(i != field.length -1 ){
+					datainput += ',';
+				}
+			}
+		}else{
+			datainput += '"'+element.name+'"';
+			datainput += ':';
+			datainput += '"'+element.value+'"';
+			if(i != field.length -1 ){
+				datainput += ',';
+			}
+		}		
 		i++;
 	});
 	datainput += '}';
