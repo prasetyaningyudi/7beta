@@ -39,8 +39,10 @@
 				
 				<div class="chart">
 					<div class="container-fluid mt-4 pb-4" id="show-data">
-
 					</div>
+					<div class="mypagination" aria-label="navigation">
+
+					</div>					
 				</div>
 			</div>	
 			</div>	
@@ -180,7 +182,7 @@ $(document).ready(function(){
 	//show data
 	show_data('<?php echo site_url($class); ?>');	
 	//insert update delete data
-	crud_data('<?php echo site_url($class); ?>');
+	crud_data('<?php echo site_url($class); ?>');	
 });
 </script>
 

@@ -25,23 +25,31 @@ class Pegawai extends CI_Controller {
 	
 	public function list(){
 		$filters = array();
+		$limit = array('4', '0');
 		$r_nama = '';
 		$r_alamat = '';
 		$r_pendidikan = '';
 		$r_jenis_kelamin = '';
 		$r_kesehatan = '';
+		//var_dump($_POST['nama']);
 		if(isset($_POST['submit'])){
-			if ($_POST['nama'] != '' or $_POST['nama'] != null) {
-				$filters[] = "nama = '" . $_POST['nama'] . "'";
-				$r_nama = $_POST['nama'];
+			if (isset($_POST['nama'])) {
+				if ($_POST['nama'] != '' or $_POST['nama'] != null) {
+					$filters[] = "nama = '" . $_POST['nama'] . "'";
+					$r_nama = $_POST['nama'];
+				}
 			}
-			if ($_POST['alamat'] != '' or $_POST['alamat'] != null) {
-				$filters[] = "alamat = '" . $_POST['alamat'] . "'";
-				$r_alamat = $_POST['alamat'];
+			if (isset($_POST['alamat'])) {
+				if ($_POST['alamat'] != '' or $_POST['alamat'] != null) {
+					$filters[] = "alamat = '" . $_POST['alamat'] . "'";
+					$r_alamat = $_POST['alamat'];
+				}
 			}
-			if ($_POST['pendidikan'] != '' or $_POST['pendidikan'] != null) {
-				$filters[] = "pendidikan = '" . $_POST['pendidikan'] . "'";
-				$r_pendidikan = $_POST['pendidikan'];
+			if (isset($_POST['pendidikan'])) {
+				if ($_POST['pendidikan'] != '' or $_POST['pendidikan'] != null) {
+					$filters[] = "pendidikan = '" . $_POST['pendidikan'] . "'";
+					$r_pendidikan = $_POST['pendidikan'];
+				}
 			}
 			if (isset($_POST['jenis_kelamin'])) {
 				if($_POST['jenis_kelamin'] != '' or $_POST['jenis_kelamin'] != null){
@@ -49,13 +57,22 @@ class Pegawai extends CI_Controller {
 					$r_jenis_kelamin = $_POST['jenis_kelamin'];
 				}
 			}
-			if ($_POST['kesehatan'] != '' or $_POST['kesehatan'] != null) {
-				$filters[] = "kesehatan = '" . $_POST['kesehatan'] . "'";
-				$r_kesehatan = $_POST['kesehatan'];
+			if (isset($_POST['kesehatan'])) {
+				if ($_POST['kesehatan'] != '' or $_POST['kesehatan'] != null) {
+					$filters[] = "kesehatan = '" . $_POST['kesehatan'] . "'";
+					$r_kesehatan = $_POST['kesehatan'];
+				}
 			}
+			if (isset($_POST['offset'])) {
+				if ($_POST['offset'] != '' or $_POST['offset'] != null) {
+					$limit[1] = $_POST['offset'];
+				}
+			}			
 		}
 		
-		$data = $this->pegawai_model->get($filters);
+		$data = $this->pegawai_model->get($filters, $limit);
+		$total_data = count($this->pegawai_model->get($filters));
+		$limit[] = $total_data;
 		
 		//var_dump($data);
 
@@ -138,7 +155,7 @@ class Pegawai extends CI_Controller {
 			'placeholder'	=> '--Pilih Pendidikan--',
 			'value' 		=> $r_pendidikan,
 			'options'		=> $pendidikan,
-			'classes' 		=> 'required',
+			'classes' 		=> '',
 		);	
 		$fields[] = (object) array(
 			'type' 			=> 'radio',
@@ -146,7 +163,7 @@ class Pegawai extends CI_Controller {
 			'name' 			=> 'jenis_kelamin',
 			'value' 		=> $r_jenis_kelamin,
 			'options'		=> $jenis_kelamin,
-			'classes' 		=> 'required',
+			'classes' 		=> '',
 		);
 		$fields[] = (object) array(
 			'type' 			=> 'checkbox',
@@ -154,7 +171,7 @@ class Pegawai extends CI_Controller {
 			'name' 			=> 'kesehatan',
 			'value' 		=> $r_kesehatan,
 			'options'		=> $kesehatan,				
-			'classes' 		=> 'required',
+			'classes' 		=> '',
 		);				
 
 		$this->data['list'] = (object) array (
@@ -166,8 +183,30 @@ class Pegawai extends CI_Controller {
 			'header'  	=> $header,
 			'body'  	=> $body,
 			'footer'  	=> null,
-		);
-	
+		);		
+
+		$this->data['list'] = (object) array (
+			'type'  	=> 'table',
+			'editable'	=> true,
+			'deletable'	=> true,
+			'classes'  	=> 'striped bordered hover',
+			'filters'  	=> $fields,
+			'header'  	=> $header,
+			'body'  	=> $body,
+			'footer'  	=> null,
+		);			
+
+		$this->data['list'] = (object) array (
+			'type'  	=> 'table',
+			'editable'	=> true,
+			'deletable'	=> true,
+			'classes'  	=> 'striped bordered hover',
+			'pagination'=> $limit,
+			'filters'  	=> $fields,
+			'header'  	=> $header,
+			'body'  	=> $body,
+			'footer'  	=> null,
+		);		
 		echo json_encode($this->data['list']);
 	}
 	
@@ -352,7 +391,7 @@ class Pegawai extends CI_Controller {
 				'classes' 	=> 'required',
 			);
 			$fields[] = (object) array(
-				'type' 		=> 'text',
+				'type' 		=> 'textarea',
 				'label' 	=> 'Alamat',
 				'name' 		=> 'alamat',
 				'value' 	=> $r_alamat,

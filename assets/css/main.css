@@ -282,14 +282,14 @@ body {
 	overflow-x :hidden;
 	width: 15%;
 	z-index: -1;
-	
+	visibility:hidden;
 }
 
 #filter-content{
 	background: white;
 	border-left: solid 1px #ABC7E0;
 	border-top: solid 1px #ABC7E0;
-	height: 100%;
+	min-height: 100%;
 	margin-right: -100%;
 	position:absolute;
 	top: 0px;
@@ -311,7 +311,7 @@ body {
 }
 
 .filter-footer{
-	padding: 10px;	
+	padding: 10px 10px 150px 10px;	
 	border-top: 1px solid #e9ecef; 
 }
 

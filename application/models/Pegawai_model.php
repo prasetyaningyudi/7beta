@@ -9,7 +9,7 @@ class Pegawai_model extends CI_Model {
 		parent::__construct();
     }
 
-	public function get($filters=null){
+	public function get($filters=null, $limit=null){
 		$sql = "SELECT * FROM " . $this->_table1;
 		$sql .= " WHERE 1=1";
 		if(isset($filters) and $filters != null){
@@ -18,6 +18,9 @@ class Pegawai_model extends CI_Model {
 			}
 		}
 		$sql .= " ORDER BY ID DESC";
+		if(isset($limit) and $limit != null){
+			$sql .= " LIMIT ".$limit[0]." OFFSET ".$limit[1];
+		}
 		//var_dump($sql); die;
 		
 		$query = $this->db->query($sql);
