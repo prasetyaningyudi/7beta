@@ -6,9 +6,9 @@ function show_data(targeturl){
 		dataType : 'json',
 		success : function(list){				
 			var html = '';
-			html +=	'<div class="button-filter button-toolbar" id="button-filter" style="float:right;text-align:center;font-size:16px">';
+			html +=	'<div class="button-filter button-toolbar" id="button-filter" style="float:right;text-align:center;font-size:15px">';
 			html +=	'<a href="javascript:void(0);" title="filter">';
-			html +=	'<i style="font-size: 18px;" class="fa fa-filter"></i><br>FILTER';
+			html +=	'<i style="font-size: 16px;" class="fa fa-filter"></i><br>FILTER';
 			html +=	'</a>';
 			html +=	'</div>';
 			if(list.filters != null){
@@ -230,9 +230,9 @@ function show_data_pagination(targeturl, offset, from_filter){
 		data : JSON.parse(datainput),
 		success: function(list){
 			var html = '';
-			html +=	'<div class="button-filter button-toolbar" id="button-filter" style="float:right;text-align:center;font-size:16px">';
+			html +=	'<div class="button-filter button-toolbar" id="button-filter" style="float:right;text-align:center;font-size:15px">';
 			html +=	'<a href="javascript:void(0);" title="filter">';
-			html +=	'<i style="font-size: 18px;" class="fa fa-filter"></i><br>FILTER';
+			html +=	'<i style="font-size: 16px;" class="fa fa-filter"></i><br>FILTER';
 			html +=	'</a>';
 			html +=	'</div>';
 			if(list.filters != null){
@@ -383,15 +383,31 @@ function show_data_pagination(targeturl, offset, from_filter){
 					}
 				});
 				
-/* 				$('#button-submit-filter').on('click',function(){
-					show_data_pagination(targeturl, offset, true);
-				});		 */		
+	
 				
 			}else{
-/* 				$('#button-submit-filter').on('click',function(){
-					show_data_pagination(targeturl, false, true);
-				});	 */
+
 			}
+			
+			if(from_filter == true){
+				var html = '';
+				var j = 0
+				var myArray = [];
+				for(i=0;i<list.filters.length;i++){
+					if(list.filters[i].value != '' && list.filters[i].value != null){
+						myArray.push('<span class="text-body">'+list.filters[i].label+' : </span><span class=".text-secondary">'+list.filters[i].value+'</span>');
+						j++;
+					}
+				}
+				if(j > 1){
+					html +=	'<span class="text-dark">'+j+' Filters <i class="fa fa-caret-right"></i></span> ';
+				}else{
+					html +=	'<span class="text-dark">A Filter <i class="fa fa-caret-right"></i></span> ';
+				}
+				html += ''+myArray.join(', ');
+				$('.title-info').html(html);
+			}			
+			
 		}
 	});
 }

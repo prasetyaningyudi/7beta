@@ -2,8 +2,19 @@
 	<div class="main-content">
 		<div class="container-fluid">
 		<div class="title row align-items-center">
-			<div class="col-6">
-				Breadcrum
+			<div class="col-6" style="font-size:20px">
+				<?php 
+					if(isset($subtitle)){
+						echo ucwords(strtolower($subtitle)).' ';
+					}else{
+						echo '';
+					} 
+					if(isset($title)){
+						echo ucwords(strtolower($title));
+					}else{
+						echo 'Untitled';
+					}
+				?>	
 			</div>		
 			
 			<div class="col-6 text-right font-weight-bold">
@@ -11,9 +22,9 @@
 	
 				</div>		
 			
-				<div class="button-input button-toolbar" id="button-input" style="float:right;text-align:center;font-size:16px">
+				<div class="button-input button-toolbar" id="button-input" style="float:right;text-align:center;font-size:15px">
 				<a href="javascript:void(0);" data-toggle="modal" data-target="#modal-add" title="add">
-					<i style="font-size: 18px;" class="fa fa-plus"></i><br>ADD
+					<i style="font-size: 16px;" class="fa fa-plus"></i><br>ADD
 				</a>
 				</div>			
 			</div>	
@@ -22,19 +33,8 @@
 		
 		<div class="main">
 			<div class="widget">
-				<div class="title">
-					<?php 
-						if(isset($subtitle)){
-							echo ucwords(strtolower($subtitle)).' ';
-						}else{
-							echo '';
-						} 
-						if(isset($title)){
-							echo ucwords(strtolower($title));
-						}else{
-							echo 'Untitled';
-						}
-					?>			
+				<div class="title title-info font-weight-light">
+		
 				</div>
 				
 				<div class="chart">
