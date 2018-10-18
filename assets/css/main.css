@@ -315,3 +315,32 @@ body {
 	border-top: 1px solid #e9ecef; 
 }
 
+/* for login 
+@import url("//netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.css"); */
+.login-block{
+height: 100vh;
+background: #35475E;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to bottom, #7B93D9, #35475E);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to bottom, #7B93D9, #35475E); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+width:100%;
+padding : 150px 0 0 0;
+}
+.nav-tab a{margin-top: -1px;}
+.container{background:#fff; border-radius: 10px; box-shadow:15px 20px 0px rgba(0,0,0,0.1);width: 60%;border-top:solid 1px #007BFF;}
+/*.banner-sec{background:url(../images/bg-1.jpeg)  no-repeat left bottom; background-size:cover; min-height:500px; border-radius: 0 10px 10px 0; padding:0;}*/
+.banner-sec{background:#fff; min-height:500px; border-radius: 0 10px 10px 0; padding:0;}
+.carousel-inner{border-radius:0 10px 10px 0;}
+.carousel-caption{text-align:left; left:5%;}
+.register-sec{display:none;}
+.register-sec, .login-sec{padding: 50px 10px; position:relative;width:100%;height:100%;}
+.register-sec .copy-text, .login-sec .copy-text{position:absolute; width:80%; bottom:50px; font-size:13px; text-align:center;}
+.register-sec .copy-text i, .login-sec .copy-text i{color:#FEB58A;}
+.register-sec .copy-text a, .login-sec .copy-text a{color:#E36262;}
+.register-sec h2, .login-sec h2{margin-bottom:30px; font-weight:800; font-size:30px; color: #DE6262;}
+.register-sec h2:after, .login-sec h2:after{content:" "; width:100px; height:5px; background:#FEB58A; display:block; margin-top:20px; border-radius:3px; margin-left:auto;margin-right:auto}
+.btn-login{background: #DE6262; color:#fff; font-weight:600;}
+.banner-text{width:70%; position:absolute; bottom:40px; padding-left:20px;background: rgba(0,0,0,0.4);border-radius: 5px}
+.banner-text h2{color:#fff; font-weight:600;}
+.banner-text h2:after{content:" "; width:100px; height:5px; background:#FFF; display:block; margin-top:20px; border-radius:3px;}
+.banner-text p{color:#fff;}
+

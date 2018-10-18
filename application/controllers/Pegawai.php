@@ -25,7 +25,7 @@ class Pegawai extends CI_Controller {
 	
 	public function list(){
 		$filters = array();
-		$limit = array('4', '0');
+		$limit = array('2', '0');
 		$r_nama = '';
 		$r_alamat = '';
 		$r_pendidikan = '';
