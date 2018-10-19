@@ -395,7 +395,16 @@ function show_data_pagination(targeturl, offset, from_filter){
 				var myArray = [];
 				for(i=0;i<list.filters.length;i++){
 					if(list.filters[i].value != '' && list.filters[i].value != null){
-						myArray.push('<span class="text-body">'+list.filters[i].label+' : </span><span class=".text-secondary">'+list.filters[i].value+'</span>');
+						if(list.filters[i].type == 'select'){
+							for(var k = 0; k<list.filters[i].options.length; k++){
+								//console.log(list.filters[i].options[k].value);
+								if(list.filters[i].options[k].value == list.filters[i].value){
+									myArray.push('<span class="text-body">'+list.filters[i].label+' : </span><span class=".text-secondary">'+list.filters[i].options[k].label+'</span>');
+								}
+							}
+						}else{
+							myArray.push('<span class="text-body">'+list.filters[i].label+' : </span><span class=".text-secondary">'+list.filters[i].value+'</span>');
+						}
 						j++;
 					}
 				}
