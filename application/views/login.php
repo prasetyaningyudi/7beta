@@ -1,5 +1,25 @@
 <section class="login-block">
 <div class="container">
+	<div class="modal fade" id="modal-info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Information</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			  <span aria-hidden="true">&times;</span>
+			</button>
+		  </div>
+		  <div class="modal-body">
+			   
+		  </div>
+		  <div class="modal-footer">
+			<input type="hidden" name="id" id="id" class="form-control">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
 	<div class="row">
 		<div class="col-md-4">
 			<div class="row nav-tab">
@@ -12,7 +32,7 @@
 			</div>
 			<div class="login-sec">
 				<h2 class="text-center">Login Now</h2>
-				<form class="login-form">
+				<form class="login-form" method="post">
 				  <div class="form-group">
 					<label for="exampleInputEmail1" class="text-uppercase">Username</label>
 					<input name="username" type="text" class="form-control" placeholder="" required>
@@ -28,7 +48,7 @@
 					  <input type="checkbox" class="form-check-input">
 					  <small>Remember Me</small>
 					</label>
-					<button type="submit" class="btn btn-login float-right">Submit</button>
+					<button type="submit" id="login-submit" name="login-submit" class="btn btn-login float-right">Submit</button>
 				  </div>
 				</form>
 				<div class="copy-text">Created with <i class="fa fa-heart"></i> by <a href="http://omyudi.com">OmYudi.com</a></div>
@@ -36,7 +56,7 @@
 		
 			<div class="register-sec">
 				<h2 class="text-center">Register Now</h2>
-				<form class="login-form">
+				<form class="register-form" method="post">
 				  <div class="form-group">
 					<label for="exampleInputEmail1" class="text-uppercase">Username</label>
 					<input name="username" type="text" class="form-control" placeholder="" required>
@@ -50,7 +70,7 @@
 					<input name="password_r" type="password" class="form-control" placeholder="" required>
 				  </div>			  
 				  <div class="form-check">
-					<button type="submit" class="btn btn-login float-right">Submit</button>
+					<button type="submit" name="register-submit" class="btn btn-login float-right">Submit</button>
 				  </div>
 				</form>
 				<div class="copy-text">Created with <i class="fa fa-heart"></i> by <a href="http://omyudi.com">OmYudi.com</a></div>
@@ -99,3 +119,13 @@
 	</div>
 </div>
 </section>
+
+<script src="<?php echo base_url(); ?>assets/js/login.js"></script>	
+
+		
+<script type="text/javascript">
+$(document).ready(function(){
+	//show data
+	login_data('<?php echo site_url($class); ?>');	
+});
+</script>

@@ -9,15 +9,69 @@ class Authentication extends CI_Controller {
 		$this->load->library('session');		
 		$this->load->helper('url');			
 		$this->load->database();
-		//$this->load->model('pegawai_model');
+		$this->load->model('user_model');
 		$this->data['error'] = array();
 		$this->data['title'] = 'Authentication';	
 	}
 	
-	public function login(){
-		$this->data['subtitle'] = 'Login';
-		$this->data['class'] = __CLASS__;		
-		$this->load->view('section_header', $this->data);
-		$this->load->view('login');
+	public function index(){
+		$this->login();
 	}
+	
+	public function login(){
+		if(isset($_POST['login-submit'])){
+			$error_info = array();
+			$error_status = false;			
+			if($_POST['username'] == ''){
+				$error_info[] = 'Username can not be null';
+				$error_status = true;
+			}
+			if($_POST['password'] == ''){
+				$error_info[] = 'Password can not be null';
+				$error_status = true;
+			}
+			$filters = array();
+			$filters[] = "A.USERNAME = '".$_POST['username']."'";
+			$filters[] = "A.PASSWORD = '".md5($_POST['password'])."'";
+			$filters[] = "A.STATUS = '1'";
+			
+			$data = $this->user_model->get($filters);	
+			if(empty($data)){
+				$error_info[] = 'Wrong Username or Password';
+				$error_status = true;				
+			}
+			
+			if($error_status == true){
+				$this->data['error'] = (object) array (
+					'type'  	=> 'error',
+					'status'	=> $error_status,
+					'info'	=> $error_info,
+				);				
+				echo json_encode($this->data['error']);
+			}else{
+				foreach($data as $item){
+					$data_session=array(
+						'ID'=>$item->ID,
+						'USERNAME'=>$item->USERNAME,
+						'USER_ALIAS'=>$item->USER_ALIAS,
+						'ROLE_ID'=>$item->BID,
+						'ROLE_NAME'=>$item->ROLE_NAME,
+						'is_logged_in'=>1
+					);					
+				}
+				//create session
+				$this->session->set_userdata($data_session);		
+			}
+		}else{
+			$this->data['subtitle'] = 'Login';
+			$this->data['class'] = __CLASS__;		
+			$this->load->view('section_header', $this->data);
+			$this->load->view('login');
+		}
+	}
+	
+	public function logout(){	
+		$this->session->sess_destroy();
+		redirect('home');
+	}		
 }

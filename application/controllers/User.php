@@ -191,7 +191,15 @@ class User extends CI_Controller {
 			if(strlen ($_POST['username']) < 5){
 				$error_info[] = 'Username minimum 5 character';
 				$error_status = true;
-			}				
+			}		
+
+			$filter = array();
+			$filter[] = "A.USERNAME = '". $_POST['username']."'";
+			$data = $this->user_model->get($filter);
+			if(!empty($data)){
+				$error_info[] = 'Username must be unique';
+				$error_status = true;				
+			}			
 			if($_POST['password'] == ''){
 				$error_info[] = 'Password can not be null';
 				$error_status = true;
@@ -435,7 +443,7 @@ class User extends CI_Controller {
 				'name' 		=> 'id',
 				'value' 	=> $r_id,
 				'classes' 	=> '',
-			);			
+			);
 			$fields[] = (object) array(
 				'type' 			=> 'text',
 				'label' 		=> 'Username',
