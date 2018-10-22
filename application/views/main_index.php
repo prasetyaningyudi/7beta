@@ -22,10 +22,12 @@
 	
 				</div>		
 			
-				<div class="button-input button-toolbar" id="button-input" style="float:right;text-align:center;font-size:15px">
-				<a href="javascript:void(0);" data-toggle="modal" data-target="#modal-add" title="add">
-					<i style="font-size: 16px;" class="fa fa-plus"></i><br>ADD
-				</a>
+				<div class="insert">
+					<div class="button-input button-toolbar" id="button-input" style="float:right;text-align:center;font-size:15px">
+					<a href="javascript:void(0);" data-toggle="modal" data-target="#modal-add" title="add">
+						<i style="font-size: 16px;" class="fa fa-plus"></i><br>ADD
+					</a>
+					</div>			
 				</div>			
 			</div>	
 		</div>	

@@ -172,34 +172,14 @@ class Pegawai extends CI_Controller {
 			'value' 		=> $r_kesehatan,
 			'options'		=> $kesehatan,				
 			'classes' 		=> '',
-		);				
+		);						
 
 		$this->data['list'] = (object) array (
 			'type'  	=> 'table',
+			'insertable'=> true,
 			'editable'	=> true,
 			'deletable'	=> true,
-			'classes'  	=> 'striped bordered hover',
-			'filters'  	=> $fields,
-			'header'  	=> $header,
-			'body'  	=> $body,
-			'footer'  	=> null,
-		);		
-
-		$this->data['list'] = (object) array (
-			'type'  	=> 'table',
-			'editable'	=> true,
-			'deletable'	=> true,
-			'classes'  	=> 'striped bordered hover',
-			'filters'  	=> $fields,
-			'header'  	=> $header,
-			'body'  	=> $body,
-			'footer'  	=> null,
-		);			
-
-		$this->data['list'] = (object) array (
-			'type'  	=> 'table',
-			'editable'	=> true,
-			'deletable'	=> true,
+			'statusable'=> true,
 			'classes'  	=> 'striped bordered hover',
 			'pagination'=> $limit,
 			'filters'  	=> $fields,

@@ -215,6 +215,21 @@ $('#show-data').on('click','.item-delete',function(){
 	return false;
 });
 
+//delete record to database
+$('#show-data').on('click','.item-status',function(){
+	var id = $(this).attr("id");
+	$.ajax({
+		type : "POST",
+		url  : targeturl+'/update_status',
+		dataType : "JSON",
+		data : {id:id},
+		success: function(data){
+			show_data(targeturl+'/list');
+		}
+	});
+	return false;
+});
+
 function fieldData(data){
 	//console.log(data);
 	var html = '';

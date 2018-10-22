@@ -4,7 +4,10 @@ function show_data(targeturl){
 		url   : targeturl+'/list',
 		async : true,
 		dataType : 'json',
-		success : function(list){				
+		success : function(list){
+			if(list.insertable == false){
+				$(".insert").hide();
+			}
 			var html = '';
 			html +=	'<div class="button-filter button-toolbar" id="button-filter" style="float:right;text-align:center;font-size:15px">';
 			html +=	'<a href="javascript:void(0);" title="filter">';
@@ -61,9 +64,9 @@ function show_data(targeturl){
 					html += list.header[i][j].value;
 					html += '</td>';
 				}
-				if(list.editable == true || list.deletable == true){
+				if(list.editable == true || list.deletable == true || list.statusable == true){
 					if(i==0){
-						html += '<td class="align-middle text-center font-weight-bold" rowspan="'+list.header.length+'" colspan="2">Action';
+						html += '<td class="align-middle text-center font-weight-bold" rowspan="'+list.header.length+'" colspan="3">Action';
 						html += '</td>'; 
 					}
 				}
@@ -94,6 +97,11 @@ function show_data(targeturl){
 				if(list.body.length == 1 & list.body[i][0].classes.includes("empty") == true){
 					
 				}else{
+					if(list.statusable == true){
+						html += '<td class="text-center font-weight-bold">';
+						html += '<a class="item-status" id="'+list.body[i][0].value+'" href="javascript:void(0);" title="edit status"><i style="font-size: 16px;" class="fa fa-check"></i></a>';
+						html += '</td>';
+					}					
 					if(list.editable == true){
 						html += '<td class="text-center font-weight-bold">';
 						html += '<a class="item-update" id="'+list.body[i][0].value+'" href="javascript:void(0);" title="edit"><i style="font-size: 16px;" class="fa fa-pencil"></i></a>';
@@ -229,6 +237,9 @@ function show_data_pagination(targeturl, offset, from_filter){
 		dataType : "JSON",
 		data : JSON.parse(datainput),
 		success: function(list){
+			if(list.insertable == false){
+				$(".insert").hide();
+			}
 			var html = '';
 			html +=	'<div class="button-filter button-toolbar" id="button-filter" style="float:right;text-align:center;font-size:15px">';
 			html +=	'<a href="javascript:void(0);" title="filter">';

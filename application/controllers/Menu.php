@@ -144,8 +144,10 @@ class Menu extends CI_Controller {
 
 		$this->data['list'] = (object) array (
 			'type'  	=> 'table',
+			'insertable'=> true,
 			'editable'	=> true,
 			'deletable'	=> true,
+			'statusable'=> true,
 			'classes'  	=> 'striped bordered hover',
 			'pagination'=> $limit,
 			'filters'  	=> $fields,
@@ -527,6 +529,32 @@ class Menu extends CI_Controller {
 				'fields'  	=> $fields,
 			);	
 			echo json_encode($this->data['insert']);
+		}
+	}
+	
+	public function update_status(){
+		if(isset($_POST['id']) and $_POST['id'] != null){
+			$filters = array();
+			$filters[] = "A.ID = ". $_POST['id'];
+			
+			$result = $this->menu_model->get($filters);
+			if($result != null){
+				foreach($result as $item){
+					$status = $item->STATUS;
+				}
+				if($status == '1'){
+					$new_status = '0';
+				}else if($status == '0'){
+					$new_status = '1';
+				}
+			}
+			
+			$this->data['update'] = array(
+					'STATUS' => $new_status,
+				);	
+				
+			$result = $this->menu_model->update($this->data['update'], $_POST['id']);
+			echo json_encode($result);	
 		}
 	}
 	
