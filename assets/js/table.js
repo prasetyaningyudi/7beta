@@ -99,17 +99,17 @@ function show_data(targeturl){
 				}else{
 					if(list.statusable == true){
 						html += '<td class="text-center font-weight-bold">';
-						html += '<a class="item-status" id="'+list.body[i][0].value+'" href="javascript:void(0);" title="edit status"><i style="font-size: 16px;" class="fa fa-check"></i></a>';
+						html += '<a class="item-status" id="'+list.body[i][0].value+'" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="edit status"><i style="font-size: 16px;" class="fa fa-check"></i></a>';
 						html += '</td>';
 					}					
 					if(list.editable == true){
 						html += '<td class="text-center font-weight-bold">';
-						html += '<a class="item-update" id="'+list.body[i][0].value+'" href="javascript:void(0);" title="edit"><i style="font-size: 16px;" class="fa fa-pencil"></i></a>';
+						html += '<a class="item-update" id="'+list.body[i][0].value+'" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="edit"><i style="font-size: 16px;" class="fa fa-pencil"></i></a>';
 						html += '</td>';
 					}
 					if(list.deletable == true){
 						html += '<td class="text-center font-weight-bold">';
-						html += '<a class="item-delete" id="'+list.body[i][0].value+'" href="javascript:void(0);" title="delete"><i style="font-size: 16px;" class="fa fa-trash"></i></a>';
+						html += '<a class="item-delete" id="'+list.body[i][0].value+'" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="delete"><i style="font-size: 16px;" class="fa fa-trash"></i></a>';
 						html += '</td>';
 					}								
 				}					
@@ -172,6 +172,8 @@ function show_data(targeturl){
 					return false;
 				});					
 			}
+			var html = '';
+			$('.title-info').html(html);
 		}
 	});
 	
@@ -333,16 +335,21 @@ function show_data_pagination(targeturl, offset, from_filter){
 				if(list.body.length == 1 & list.body[i][0].classes.includes("empty") == true){
 					
 				}else{
+					if(list.statusable == true){
+						html += '<td class="text-center font-weight-bold">';
+						html += '<a class="item-status" id="'+list.body[i][0].value+'" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="edit status"><i style="font-size: 16px;" class="fa fa-check"></i></a>';
+						html += '</td>';
+					}					
 					if(list.editable == true){
 						html += '<td class="text-center font-weight-bold">';
-						html += '<a class="item-update" id="'+list.body[i][0].value+'" href="javascript:void(0);" title="edit"><i style="font-size: 16px;" class="fa fa-pencil"></i></a>';
+						html += '<a class="item-update" id="'+list.body[i][0].value+'" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="edit"><i style="font-size: 16px;" class="fa fa-pencil"></i></a>';
 						html += '</td>';
 					}
 					if(list.deletable == true){
 						html += '<td class="text-center font-weight-bold">';
-						html += '<a class="item-delete" id="'+list.body[i][0].value+'" href="javascript:void(0);" title="delete"><i style="font-size: 16px;" class="fa fa-trash"></i></a>';
+						html += '<a class="item-delete" id="'+list.body[i][0].value+'" href="javascript:void(0);" data-toggle="tooltip" data-placement="top" title="delete"><i style="font-size: 16px;" class="fa fa-trash"></i></a>';
 						html += '</td>';
-					}								
+					}							
 				}					
 				html += '</tr>';
 			}					
@@ -595,6 +602,10 @@ function show_data_pagination(targeturl, offset, from_filter){
 	});
 	return false;
 }); */
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 
 function tableClasses(value){
 	var table='';

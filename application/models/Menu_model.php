@@ -38,6 +38,24 @@ class Menu_model extends CI_Model {
 		$query = $this->db->query($sql);
 		$result = $query->result();
 		return $result;
+	}
+
+	public function get_menu(){
+		$sql = "SELECT * FROM " . $this->_table1;
+		$sql .= " WHERE MENU_ID IS NULL AND STATUS = '1'";
+		$sql .= " ORDER BY MENU_ORDER ASC";		
+		$query = $this->db->query($sql);
+		$result = $query->result();
+		return $result;		
+	}
+	
+	public function get_sub_menu(){
+		$sql = "SELECT * FROM " . $this->_table1;
+		$sql .= " WHERE MENU_ID IS NOT NULL AND STATUS = '1'";
+		$sql .= " ORDER BY MENU_ORDER ASC";			
+		$query = $this->db->query($sql);
+		$result = $query->result();
+		return $result;		
 	}	
 	
 	public function insert($data){

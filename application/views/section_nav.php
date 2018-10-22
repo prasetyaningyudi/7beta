@@ -12,7 +12,28 @@
 		</div>
 		<nav>
 			<ul>
+				<?php foreach ($menu as $item):?>
 				<li>
+					<a href="#<?php echo $item->MENU_NAME; ?>" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+					<span><i class="fa fa-<?php echo $item->MENU_ICON; ?>"></i></span>
+					<span><?php echo $item->MENU_NAME; ?></span>
+					</a>
+					<ul class="collapse list-unstyled" id="<?php echo $item->MENU_NAME; ?>">
+						<?php foreach ($sub_menu as $sub_item):?>
+							<?php if($item->MENU_ORDER == substr($sub_item->MENU_ORDER, 0, 2)) : ?>
+								<li>
+									<a href="<?php echo $sub_item->PERMALINK; ?>">
+									<span><i class="fa fa-<?php echo $sub_item->MENU_ICON; ?>"></i></span>
+									<span><?php echo $sub_item->MENU_NAME; ?></span>
+									</a>
+								</li>
+							<?php endif; ?>
+						<?php endforeach; ?>
+					</ul>
+				</li>
+				<?php endforeach; ?>
+			
+<!-- 				<li  class="active">
 					<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
 						<span><i class="fa fa-user"></i></span>
 						<span>Main</span>
@@ -28,36 +49,7 @@
 							<a href="http://localhost/7beta/main/delete"><span><i class="fa fa-user"></i></span><span>Delete</span></a>
 						</li>
 					</ul>
-				</li>
-				<li>
-					<a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-						<span><i class="fa fa-envelope"></i></span>
-						<span>Messages</span>
-					</a>
-					<ul class="collapse list-unstyled" id="pageSubmenu">
-						<li>
-							<a href="#"><span><i class="fa fa-user"></i></span><span>Messages 1</span></a>
-						</li>
-						<li>
-							<a href="#"><span><i class="fa fa-user"></i></span><span>Messages 2</span></a>
-						</li>
-						<li>
-							<a href="#"><span><i class="fa fa-user"></i></span><span>Messages 3</span></a>
-						</li>
-					</ul>					
-				</li>
-				<li class="active">
-					<a href="#">
-						<span><i class="fa fa-bar-chart"></i></span>
-						<span>Analytics</span>
-					</a>
-				</li>
-				<li>
-					<a href="#">
-						<span><i class="fa fa-credit-card-alt"></i></span>
-						<span>Payments</span>
-					</a>
-				</li>
+				</li> -->
 			</ul>
 		</nav>
 	</div>

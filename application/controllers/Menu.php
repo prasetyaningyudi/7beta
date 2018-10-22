@@ -10,6 +10,8 @@ class Menu extends CI_Controller {
 		$this->load->helper('url');			
 		$this->load->database();
 		$this->load->model('menu_model');
+		$this->data['menu'] = $this->menu_model->get_menu();
+		$this->data['sub_menu'] = $this->menu_model->get_sub_menu();		
 		$this->data['error'] = array();
 		$this->data['title'] = 'Menu';
 	}

@@ -47,7 +47,7 @@
 					</div>					
 				</div>
 			</div>	
-			</div>	
+		</div>	
 	</div>
 
 	<div id="filter-sidebar">
@@ -181,6 +181,9 @@
 		
 <script type="text/javascript">
 $(document).ready(function(){
+	$(function () {
+	  $('[data-toggle="tooltip"]').tooltip()
+	})	
 	//show data
 	show_data('<?php echo site_url($class); ?>');	
 	//insert update delete data
