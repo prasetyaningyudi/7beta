@@ -1,3 +1,4 @@
+$(".insert").hide();
 function show_data(targeturl){
 	$.ajax({
 		type  : 'ajax',
@@ -7,6 +8,8 @@ function show_data(targeturl){
 		success : function(list){
 			if(list.insertable == false){
 				$(".insert").hide();
+			}else{
+				$(".insert").show();
 			}
 			var html = '';
 			html +=	'<div class="button-filter button-toolbar" id="button-filter" style="float:right;text-align:center;font-size:15px">';
@@ -241,6 +244,8 @@ function show_data_pagination(targeturl, offset, from_filter){
 		success: function(list){
 			if(list.insertable == false){
 				$(".insert").hide();
+			}else{
+				$(".insert").show();
 			}
 			var html = '';
 			html +=	'<div class="button-filter button-toolbar" id="button-filter" style="float:right;text-align:center;font-size:15px">';

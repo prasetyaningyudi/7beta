@@ -7,6 +7,7 @@ class User extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
 		$this->load->library('session');		
+		$this->load->library('auth');		
 		$this->load->helper('url');			
 		$this->load->database();
 		$this->load->model('user_model');
@@ -19,6 +20,10 @@ class User extends CI_Controller {
 	}
 
 	public function index(){
+		var_dump($this->auth->getPermission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ));
+/* 		if($this->auth->getPermission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('home');
+		} */
 		$this->data['subtitle'] = 'List';
 		$this->data['class'] = __CLASS__;
 		$this->load->view('section_header', $this->data);
@@ -28,6 +33,9 @@ class User extends CI_Controller {
 	}
 	
 	public function list(){
+		if($this->auth->getPermission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('home');
+		}
 		$filters = array();
 		$limit = array('10', '0');
 		$r_username = '';
@@ -163,7 +171,7 @@ class User extends CI_Controller {
 			'type'  	=> 'table',
 			'insertable'=> true,
 			'editable'	=> true,
-			'deletable'	=> false,
+			'deletable'	=> true,
 			'statusable'=> false,
 			'classes'  	=> 'striped bordered hover',
 			'pagination'=> $limit,
@@ -176,6 +184,9 @@ class User extends CI_Controller {
 	}
 	
 	public function insert(){
+		if($this->auth->getPermission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('home');
+		}		
 		if(isset($_POST['submit'])){
 			//validation
 			$error_info = array();
@@ -331,6 +342,10 @@ class User extends CI_Controller {
 	}
 	
 	public function update(){
+		if($this->auth->getPermission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			
+			redirect ('home');
+		}		
 		if(isset($_POST['submit'])){
 			//validation
 			$error_info = array();
@@ -505,6 +520,10 @@ class User extends CI_Controller {
 	}
 	
 	public function update_status(){
+		if($this->auth->getPermission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			
+			redirect ('home');
+		}		
 		if(isset($_POST['id']) and $_POST['id'] != null){
 			$filters = array();
 			$filters[] = "A.ID = ". $_POST['id'];
@@ -531,6 +550,9 @@ class User extends CI_Controller {
 	}
 	
 	public function delete(){
+		if($this->auth->getPermission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('home');
+		}		
 		$this->data['delete'] = array(
 				'ID' => $_POST['id'],
 			);		

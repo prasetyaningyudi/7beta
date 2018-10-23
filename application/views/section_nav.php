@@ -3,7 +3,25 @@
 			<i class="fa fa-tachometer"></i>
 			<span>7Beta</span>
 		</div>
-		<a href="#" class="nav-trigger"><span></span></a>
+		<a href="#" class="nav-trigger"><span>
+		</span></a>
+		<div class="navigation">
+			<div class="dropdown">
+				<?php if($this->session->USERNAME != null): ?>
+					<a class="dropdown-toggle dropdown-head" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+						<?php echo 'Welcome, '.$this->session->USERNAME; ?>
+					</a>
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="margin-top:8px">
+						<p class="dropdown-header"><i class="fa fa-users"></i> Login as <?php echo $this->session->ROLE_NAME; ?></p>
+						<a class="dropdown-item" href="<?php echo base_url().'profile'; ?>"><i class="fa fa-cog"></i> Profile Setting</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="<?php echo base_url().'authentication/logout'; ?>"><i class="fa fa-sign-out"></i> Sign Out</a>
+					</div>
+				<?php else: ?>
+					<a title="login" role="button" class="dropdown-head" href="<?php echo base_url().'authentication/login'; ?>"><i class="fa fa-sign-in"> </i> Welcome, Guest</a>	
+				<?php endif; ?>
+			</div>
+		</div>		
 	</div>
 	<div class="side-nav">
 		<div class="logo">
@@ -32,24 +50,6 @@
 					</ul>
 				</li>
 				<?php endforeach; ?>
-			
-<!-- 				<li  class="active">
-					<a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
-						<span><i class="fa fa-user"></i></span>
-						<span>Main</span>
-					</a>
-					<ul class="collapse list-unstyled" id="homeSubmenu">
-						<li>
-							<a href="http://localhost/7beta/main/insert"><span><i class="fa fa-user"></i></span><span>Insert</span></a>
-						</li>
-						<li>
-							<a href="http://localhost/7beta/main/update"><span><i class="fa fa-user"></i></span><span>Update</span></a>
-						</li>
-						<li>
-							<a href="http://localhost/7beta/main/delete"><span><i class="fa fa-user"></i></span><span>Delete</span></a>
-						</li>
-					</ul>
-				</li> -->
 			</ul>
 		</nav>
 	</div>

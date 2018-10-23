@@ -47,7 +47,11 @@ class Authentication extends CI_Controller {
 					'status'	=> $error_status,
 					'info'	=> $error_info,
 				);				
-				echo json_encode($this->data['error']);
+				//echo json_encode($this->data['error']);
+				$this->data['subtitle'] = 'Login';
+				$this->data['class'] = __CLASS__;		
+				$this->load->view('section_header', $this->data);
+				$this->load->view('login');				
 			}else{
 				foreach($data as $item){
 					$data_session=array(
@@ -60,7 +64,8 @@ class Authentication extends CI_Controller {
 					);					
 				}
 				//create session
-				$this->session->set_userdata($data_session);		
+				$this->session->set_userdata($data_session);
+				redirect('home');
 			}
 		}else{
 			$this->data['subtitle'] = 'Login';
@@ -72,6 +77,6 @@ class Authentication extends CI_Controller {
 	
 	public function logout(){	
 		$this->session->sess_destroy();
-		redirect('home');
+		redirect('authentication');
 	}		
 }

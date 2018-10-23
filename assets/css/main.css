@@ -17,6 +17,15 @@ body {
 	background-color: #fff;
 	border-bottom: 3px solid #2d3d51;
 }
+.navigation{
+	height: 44px;
+	padding: 10px 20px;
+	border: solid 1px red;
+	text-align:right;
+}
+.navigation a.dropdown-head{
+	color: #EEEEEE;
+}
 /* logo in header(mobile version) and side-nav (tablet & desktop) */
 .logo {
 	height: 44px;
@@ -53,13 +62,15 @@ body {
 	width: 20px;
 	height: 44px;
 	right: 30px;
-	display: block;	
+	display: block;
+	border: solid 1px red;
 }
 .nav-trigger span, .nav-trigger span:before, span:after {
 	width: 20px;
 	height: 2px;
 	background-color: #35475e;
 	position: absolute;
+	border: solid 1px red;	
 }
 .nav-trigger span {
 	top: 50%;

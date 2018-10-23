@@ -46,7 +46,7 @@ $('#login-submit').on('click',function(){
 		i++;
 	});
 	datainput += '}';
-	console.log(datainput);
+	//console.log(datainput);
 
 	$.ajax({
 		type : "POST",
@@ -60,13 +60,13 @@ $('#login-submit').on('click',function(){
 				for(i=0; i<data.info.length; i++){
 					error_info += data.info[i]+'<br>';
 				}
-				$('#modal-info .modal-body').html('<strong>'+error_info+'</strong>');
+				$('#modal-info .modal-body').html('<strong>'+'error_info'+'</strong>');
 				$('#modal-info').modal('show');
 			}else{
-				$(".login-form").trigger("reset");
+
 			}
 		}
-	});
+	}); 
 
 	return false;
-});	
+});

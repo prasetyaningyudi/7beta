@@ -32,7 +32,7 @@
 			</div>
 			<div class="login-sec">
 				<h2 class="text-center">Login Now</h2>
-				<form class="login-form" method="post">
+				<form action="" class="login-form" method="post">
 				  <div class="form-group">
 					<label for="exampleInputEmail1" class="text-uppercase">Username</label>
 					<input name="username" type="text" class="form-control" placeholder="" required>
@@ -120,12 +120,15 @@
 </div>
 </section>
 
-<script src="<?php echo base_url(); ?>assets/js/login.js"></script>	
-
-		
-<script type="text/javascript">
-$(document).ready(function(){
-	//show data
-	login_data('<?php echo site_url($class); ?>');	
-});
-</script>
+<?php if($error->status == true): ?>
+	<?php $error_info = ''; ?>
+	<?php foreach($error->info as $val): ?>
+		<?php $error_info .= $val.'<br>'; ?>
+	<?php endforeach; ?>
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$('#modal-info .modal-body').html('<strong>'+'<?php echo $error_info; ?>'+'</strong>');
+		$('#modal-info').modal('show');	
+	});
+	</script>	
+<?php endif; ?>
