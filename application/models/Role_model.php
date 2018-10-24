@@ -17,7 +17,7 @@ class Role_model extends CI_Model {
 				$sql .= " AND " . $filter;
 			}
 		}
-		$sql .= " ORDER BY ID DESC";
+		$sql .= " ORDER BY ROLE_NAME ASC";
 		if(isset($limit) and $limit != null){
 			$sql .= " LIMIT ".$limit[0]." OFFSET ".$limit[1];
 		}

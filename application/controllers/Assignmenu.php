@@ -6,17 +6,23 @@ class Assignmenu extends CI_Controller {
 	
 	public function __construct(){
 		parent::__construct();
-		$this->load->library('session');		
+		$this->load->library('session');
+		$this->load->library('auth');				
 		$this->load->helper('url');			
 		$this->load->database();
+		$this->load->model('assignmenu_model');
+		$this->load->model('role_model');
 		$this->load->model('menu_model');
-		$this->data['menu'] = $this->menu_model->get_menu();
-		$this->data['sub_menu'] = $this->menu_model->get_sub_menu();		
+		$this->data['menu'] = $this->menu_model->get_menu($this->session->userdata('ROLE_ID'));
+		$this->data['sub_menu'] = $this->menu_model->get_sub_menu($this->session->userdata('ROLE_ID'));	
 		$this->data['error'] = array();
 		$this->data['title'] = 'Assign Menu';
 	}
 
 	public function index(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}		
 		$this->data['subtitle'] = 'List';
 		$this->data['class'] = __CLASS__;
 		$this->load->view('section_header', $this->data);
@@ -26,30 +32,25 @@ class Assignmenu extends CI_Controller {
 	}
 	
 	public function list(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}			
 		$filters = array();
 		$limit = array('10', '0');
-		$r_nama = '';
-		$r_parent = '';
-		$r_status = '';
+		$r_menuname = '';
+		$r_rolename = '';
 
-		//var_dump($_POST['nama']);
 		if(isset($_POST['submit'])){
-			if (isset($_POST['nama'])) {
-				if ($_POST['nama'] != '' or $_POST['nama'] != null) {
-					$filters[] = "A.MENU_NAME LIKE '%" . $_POST['nama'] . "%'";
-					$r_nama = $_POST['nama'];
+			if (isset($_POST['menu_name'])) {
+				if ($_POST['menu_name'] != '' or $_POST['menu_name'] != null) {
+					$filters[] = "A.MENU_ID = '" . $_POST['menu_name'] . "'";
+					$r_menuname = $_POST['menu_name'];
 				}
 			}
-			if (isset($_POST['parent'])) {
-				if ($_POST['parent'] != '' or $_POST['parent'] != null) {
-					$filters[] = "A.MENU_ID = '" . $_POST['parent'] . "'";
-					$r_parent = $_POST['parent'];
-				}
-			}
-			if (isset($_POST['status'])) {
-				if ($_POST['status'] != '' or $_POST['status'] != null) {
-					$filters[] = "A.STATUS = '" . $_POST['status'] . "'";
-					$r_status = $_POST['status'];
+			if (isset($_POST['role_name'])) {
+				if ($_POST['role_name'] != '' or $_POST['role_name'] != null) {
+					$filters[] = "A.ROLE_ID = '" . $_POST['role_name'] . "'";
+					$r_rolename = $_POST['role_name'];
 				}
 			}
 			if (isset($_POST['offset'])) {
@@ -59,8 +60,8 @@ class Assignmenu extends CI_Controller {
 			}			
 		}
 		
-		$data = $this->menu_model->get($filters, $limit);
-		$total_data = count($this->menu_model->get($filters));
+		$data = $this->assignmenu_model->get($filters, $limit);
+		$total_data = count($this->assignmenu_model->get($filters));
 		$limit[] = $total_data;
 		
 		//var_dump($data);
@@ -77,71 +78,73 @@ class Assignmenu extends CI_Controller {
 					$body[$no_body] = array(
 						(object) array( 'classes' => ' hidden ', 'value' => $value->ID ),
 						(object) array( 'classes' => ' bold align-left ', 'value' => $no_body+1 ),
+						(object) array( 'classes' => ' align-left ', 'value' => $value->MENU_ID ),
+						(object) array( 'classes' => ' align-left ', 'value' => $value->ROLE_ID ),
 						(object) array( 'classes' => ' align-left ', 'value' => $value->MENU_NAME ),
-						(object) array( 'classes' => ' align-left ', 'value' => $value->PERMALINK ),
-						(object) array( 'classes' => ' align-left ', 'value' => '<i class="fa fa-'.$value->MENU_ICON.'"></i>' ),
-						(object) array( 'classes' => ' align-left ', 'value' => $value->MENU_ORDER ),
-						(object) array( 'classes' => ' align-left ', 'value' => $value->BMENU_NAME ),
-						(object) array( 'classes' => ' align-center ', 'value' => $value->STATUS ),
+						(object) array( 'classes' => ' align-left ', 'value' => $value->ROLE_NAME ),
 					);
 					$no_body++;
 				}
 			}
         } else {
             $body[$no_body] = array(
-                (object) array ('colspan' => 100, 'classes' => ' empty bold align-center', 'value' => 'Filter First')
+                (object) array ('colspan' => 100, 'classes' => ' empty bold align-center', 'value' => '')
             );
         }
 		
 		$header = array(
 			array (
 				(object) array ('rowspan' => 1, 'classes' => 'bold align-left capitalize', 'value' => 'No'),
-				(object) array ('colspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'name'),					
-				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'permalink'),			
-				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'icon'),			
-				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'order'),			
-				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'parent'),			
-				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'status'),			
+				(object) array ('colspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'menu id'),					
+				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'role id'),			
+				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'menu name'),			
+				(object) array ('rowspan' => 1, 'classes' => 'bold align-center capitalize', 'value' => 'role name'),		
 			)		
 		);
 
-		$parent = array();
-		$data = $this->menu_model->get_parent();
-		
+		$menu_name = array();
+		$filter = array();
+		$filter[] = " A.STATUS = '1'";
+		$data = $this->menu_model->get($filter);
 		if (empty($data)) {
-			//$parent[] = (object) array('label'=>'No Data', 'value'=>'nodata');
+			
 		} else {
 			foreach ($data as $value) {
-				$parent[] = (object) array('label'=>$value->MENU_NAME, 'value'=>$value->ID);
+				$menu_name[] = (object) array('label'=>$value->MENU_NAME, 'value'=>$value->ID);
 			}
 		}	
+		
+		$role_name = array();
+		$filter = array();
+		$filter[] = " STATUS = '1'";
+		$data = $this->role_model->get($filter);
+		if (empty($data)) {
+			
+		} else {
+			foreach ($data as $value) {
+				$role_name[] = (object) array('label'=>$value->ROLE_NAME, 'value'=>$value->ID);
+			}
+		}		
 			
 		$fields = array();
 		$fields[] = (object) array(
-			'type' 			=> 'text',
-			'label' 		=> 'Name',
-			'placeholder' 	=> 'Menu Name',
-			'name' 			=> 'nama',
-			'value' 		=> $r_nama,
-			'classes' 		=> '',
-		);
-		$fields[] = (object) array(
-			'type' 			=> 'text',
-			'label' 		=> 'Status',
-			'name' 			=> 'status',
-			'placeholder'	=> 'Input status',
-			'value' 		=> $r_status,
+			'type' 			=> 'select',
+			'label' 		=> 'Menu name',
+			'name' 			=> 'menu name',
+			'placeholder'	=> '--Select Menu--',
+			'value' 		=> $r_menuname,
+			'options'		=> $menu_name,
 			'classes' 		=> '',
 		);			
 		$fields[] = (object) array(
 			'type' 			=> 'select',
-			'label' 		=> 'Parent menu',
-			'name' 			=> 'parent',
-			'placeholder'	=> '--Select Parent--',
-			'value' 		=> $r_parent,
-			'options'		=> $parent,
-			'classes' 		=> 'required',
-		);			
+			'label' 		=> 'Role Name',
+			'name' 			=> 'role_name',
+			'placeholder'	=> '--Select Role--',
+			'value' 		=> $r_rolename,
+			'options'		=> $role_name,
+			'classes' 		=> '',
+		);		
 	
 
 		$this->data['list'] = (object) array (
@@ -149,7 +152,7 @@ class Assignmenu extends CI_Controller {
 			'insertable'=> true,
 			'editable'	=> true,
 			'deletable'	=> true,
-			'statusable'=> true,
+			'statusable'=> false,
 			'classes'  	=> 'striped bordered hover',
 			'pagination'=> $limit,
 			'filters'  	=> $fields,
@@ -161,40 +164,29 @@ class Assignmenu extends CI_Controller {
 	}
 	
 	public function insert(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}			
 		if(isset($_POST['submit'])){
 			//validation
 			$error_info = array();
 			$error_status = false;
-			if($_POST['name'] == ''){
+			if($_POST['menu_name'] == ''){
 				$error_info[] = 'Menu Name can not be null';
 				$error_status = true;
 			}
-			if($_POST['permalink'] == ''){
-				$error_info[] = 'Permalink can not be null';
+			if($_POST['role_name'] == ''){
+				$error_info[] = 'Role name can not be null';
 				$error_status = true;
 			}
-			if($_POST['order'] == ''){
-				$error_info[] = 'Menu Order can not be null';
-				$error_status = true;
-			}
-			if(strlen ($_POST['order']) > 2){
-				$error_info[] = 'Menu Order maximum 2 digit number';
-				$error_status = true;
+			$filter = array();
+			$filter[] = "A.MENU_ID = '". $_POST['menu_name']."'";
+			$filter[] = "A.ROLE_ID = '". $_POST['role_name']."'";
+			$data = $this->assignmenu_model->get($filter);
+			if(!empty($data)){
+				$error_info[] = 'This pair has been inputted';
+				$error_status = true;				
 			}			
-			if(is_numeric($_POST['order']) == false){
-				$error_info[] = 'Wrong Menu Order format';
-				$error_status = true;
-			}else{
-				if(strpos($_POST['order'], '.') != false){
-					$error_info[] = 'Wrong Menu Order format';
-					$error_status = true;					
-				}
-				if (substr($_POST['order'], 0, 1) == '0' || substr($_POST['order'], 0, 2) == '00') {
-					$error_info[] = 'Wrong Menu Order format';
-					$error_status = true;	
-				}
-			}
-		
 			if($error_status == true){
 				$this->data['error'] = (object) array (
 					'type'  	=> 'error',
@@ -203,118 +195,57 @@ class Assignmenu extends CI_Controller {
 				);				
 				echo json_encode($this->data['error']);
 			}else{
-				if($_POST['parent'] != ''){
-					$filters = array();
-					$filters[] = "A.ID = '" . $_POST['parent'] . "'";
-					$data = $this->menu_model->get($filters);
-					$parent_menu_order = '';
-					if (empty($data)) {
-						//$parent[] = (object) array('label'=>'No Data', 'value'=>'nodata');
-					} else {
-						foreach ($data as $value) {
-							$parent_menu_order = $value->MENU_ORDER;
-						}
-					}	
-				}
-				$order = '';
-				if(strlen ($_POST['order']) == 1){
-					$order =  '0'.$_POST['order'];
-				}else{
-					$order =  $_POST['order'];
-				}
-				
-				if($_POST['icon'] == ''){
-					if($_POST['parent'] == ''){
-						$this->data['insert'] = array(
-								'MENU_NAME' => $_POST['name'],
-								'PERMALINK' => $_POST['permalink'],
-								'MENU_ORDER' => $order,
-								'MENU_ID' => null,
-							);
-					}else{
-						$this->data['insert'] = array(
-								'MENU_NAME' => $_POST['name'],
-								'PERMALINK' => $_POST['permalink'],
-								'MENU_ORDER' => $parent_menu_order.$order,
-								'MENU_ID' => $_POST['parent'],
-							);						
-					}
-				}else{
-					if($_POST['parent'] == ''){
-						$this->data['insert'] = array(
-								'MENU_NAME' => $_POST['name'],
-								'PERMALINK' => $_POST['permalink'],
-								'MENU_ICON' => $_POST['icon'],
-								'MENU_ORDER' => $order,
-								'MENU_ID' => null,
-							);
-					}else{
-						$this->data['insert'] = array(
-								'MENU_NAME' => $_POST['name'],
-								'PERMALINK' => $_POST['permalink'],
-								'MENU_ICON' => $_POST['icon'],
-								'MENU_ORDER' => $parent_menu_order.$order,
-								'MENU_ID' => $_POST['parent'],
-							);						
-					}
-				}
-				//var_dump($this->data['insert']);die;
-				$result = $this->menu_model->insert($this->data['insert']);
+				$this->data['insert'] = array(
+						'MENU_ID' => $_POST['menu_name'],
+						'ROLE_ID' => $_POST['role_name'],
+					);						
+
+				$result = $this->assignmenu_model->insert($this->data['insert']);
 				echo json_encode($result);				
 			}
 		}else{
-			$parent = array();
-			$data = $this->menu_model->get_parent();
-			
+			$menu_name = array();
+			$filter = array();
+			$filter[] = " A.STATUS = '1'";
+			$data = $this->menu_model->get($filter);
 			if (empty($data)) {
-				//$parent[] = (object) array('label'=>'No Data', 'value'=>'nodata');
+				
 			} else {
 				foreach ($data as $value) {
-					$parent[] = (object) array('label'=>$value->MENU_NAME, 'value'=>$value->ID);
+					$menu_name[] = (object) array('label'=>$value->MENU_NAME, 'value'=>$value->ID);
 				}
-			}			
+			}	
 			
+			$role_name = array();
+			$filter = array();
+			$filter[] = " STATUS = '1'";
+			$data = $this->role_model->get($filter);
+			if (empty($data)) {
+				
+			} else {
+				foreach ($data as $value) {
+					$role_name[] = (object) array('label'=>$value->ROLE_NAME, 'value'=>$value->ID);
+				}
+			}		
+				
 			$fields = array();
 			$fields[] = (object) array(
-				'type' 			=> 'text',
-				'label' 		=> 'Name',
-				'name' 			=> 'name',
-				'placeholder'	=> 'menu name',
+				'type' 			=> 'select',
+				'label' 		=> 'Menu name',
+				'name' 			=> 'menu name',
+				'placeholder'	=> '--Select Menu--',
 				'value' 		=> '',
-				'classes' 		=> '',
-			);
-			$fields[] = (object) array(
-				'type' 			=> 'text',
-				'label' 		=> 'Permalink',
-				'name' 			=> 'permalink',
-				'placeholder'	=> 'example : employee, #',
-				'value' 		=> '',
-				'classes' 		=> '',
-			);
-			$fields[] = (object) array(
-				'type' 			=> 'text',
-				'label' 		=> 'Icon',
-				'name' 			=> 'icon',
-				'placeholder'	=> 'use fontawesome, example : plus, minus',
-				'value' 		=> '',
-				'classes' 		=> '',
-			);
-			$fields[] = (object) array(
-				'type' 			=> 'text',
-				'label' 		=> 'Order',
-				'name' 			=> 'order',
-				'placeholder'	=> 'please input number (integer) start from 1',
-				'value' 		=> '',
+				'options'		=> $menu_name,
 				'classes' 		=> '',
 			);			
 			$fields[] = (object) array(
 				'type' 			=> 'select',
-				'label' 		=> 'Parent menu',
-				'name' 			=> 'parent',
-				'placeholder'	=> '--Select Parent--',
+				'label' 		=> 'Role Name',
+				'name' 			=> 'role_name',
+				'placeholder'	=> '--Select Role--',
 				'value' 		=> '',
-				'options'		=> $parent,
-				'classes' 		=> 'required',
+				'options'		=> $role_name,
+				'classes' 		=> '',
 			);			
 			
 
@@ -328,40 +259,28 @@ class Assignmenu extends CI_Controller {
 	}
 	
 	public function update(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}			
 		if(isset($_POST['submit'])){
-			//validation
 			$error_info = array();
 			$error_status = false;
-			if($_POST['name'] == ''){
+			if($_POST['menu_name'] == ''){
 				$error_info[] = 'Menu Name can not be null';
 				$error_status = true;
 			}
-			if($_POST['permalink'] == ''){
-				$error_info[] = 'Permalink can not be null';
+			if($_POST['role_name'] == ''){
+				$error_info[] = 'Role name can not be null';
 				$error_status = true;
 			}
-			if($_POST['order'] == ''){
-				$error_info[] = 'Menu Order can not be null';
-				$error_status = true;
-			}
-			if(strlen ($_POST['order']) > 2){
-				$error_info[] = 'Menu Order maximum 2 digit number';
-				$error_status = true;
+			$filter = array();
+			$filter[] = "A.MENU_ID = '". $_POST['menu_name']."'";
+			$filter[] = "A.ROLE_ID = '". $_POST['role_name']."'";
+			$data = $this->assignmenu_model->get($filter);
+			if(!empty($data)){
+				$error_info[] = 'This pair has been inputted';
+				$error_status = true;				
 			}			
-			if(is_numeric($_POST['order']) == false){
-				$error_info[] = 'Wrong Menu Order format';
-				$error_status = true;
-			}else{
-				if(strpos($_POST['order'], '.') != false){
-					$error_info[] = 'Wrong Menu Order format';
-					$error_status = true;					
-				}
-				if (substr($_POST['order'], 0, 1) == '0' || substr($_POST['order'], 0, 2) == '00') {
-					$error_info[] = 'Wrong Menu Order format';
-					$error_status = true;	
-				}
-			}
-			
 			if($error_status == true){
 				$this->data['error'] = (object) array (
 					'type'  	=> 'error',
@@ -370,108 +289,48 @@ class Assignmenu extends CI_Controller {
 				);				
 				echo json_encode($this->data['error']);
 			}else{
-				if($_POST['parent'] != ''){
-					$filters = array();
-					$filters[] = "A.ID = '" . $_POST['parent'] . "'";
-					$data = $this->menu_model->get($filters);
-					$parent_menu_order = '';
-					if (empty($data)) {
-						//$parent[] = (object) array('label'=>'No Data', 'value'=>'nodata');
-					} else {
-						foreach ($data as $value) {
-							$parent_menu_order = $value->MENU_ORDER;
-						}
-					}	
-				}
-				$order = '';
-				if(strlen ($_POST['order']) == 1){
-					$order =  '0'.$_POST['order'];
-				}else{
-					$order =  $_POST['order'];
-				}				
-				
-				if($_POST['icon'] == ''){
-					if($_POST['parent'] == ''){
-						$this->data['update'] = array(
-								'MENU_NAME' => $_POST['name'],
-								'PERMALINK' => $_POST['permalink'],
-								'MENU_ORDER' => $order,
-								'MENU_ID' => null,
-							);
-					}else{
-						$this->data['update'] = array(
-								'MENU_NAME' => $_POST['name'],
-								'PERMALINK' => $_POST['permalink'],
-								'MENU_ORDER' => $parent_menu_order.$order,
-								'MENU_ID' => $_POST['parent'],
-							);						
-					}
-				}else{
-					if($_POST['parent'] == ''){
-						$this->data['update'] = array(
-								'MENU_NAME' => $_POST['name'],
-								'PERMALINK' => $_POST['permalink'],
-								'MENU_ICON' => $_POST['icon'],
-								'MENU_ORDER' => $order,
-								'MENU_ID' => null,
-							);
-					}else{
-						$this->data['update'] = array(
-								'MENU_NAME' => $_POST['name'],
-								'PERMALINK' => $_POST['permalink'],
-								'MENU_ICON' => $_POST['icon'],
-								'MENU_ORDER' => $parent_menu_order.$order,
-								'MENU_ID' => $_POST['parent'],
-							);						
-					}
-				}
-				$result = $this->menu_model->update($this->data['update'], $_POST['id']);
+				$this->data['update'] = array(
+						'MENU_ID' => $_POST['menu_name'],
+						'ROLE_ID' => $_POST['role_name'],
+					);						
+
+				$result = $this->assignmenu_model->update($this->data['update'], $_POST['id']);
 				echo json_encode($result);				
-			}			
+			}	
 		}else{
-			$r_nama = '';
-			$r_permalink = '';
-			$r_icon = '';
-			$r_order = '';
-			$r_parent = '';
+			$r_menuname = '';
+			$r_rolename = '';
 			
 			$filter = array();
 			$filter[] = "A.ID = ". $_POST['id'];
-			$this->data['result'] = $this->menu_model->get($filter);
-			//var_dump($this->data['result']);
+			$this->data['result'] = $this->assignmenu_model->get($filter);
 			foreach($this->data['result'] as $value){
 				$r_id 	= $value->ID;
-				$r_nama = $value->MENU_NAME;
-				$r_permalink = $value->PERMALINK;
-				$r_icon = $value->MENU_ICON;
-				$r_parent = $value->MENU_ID;
-/* 				var_dump(strlen($value->MENU_ORDER));
-				var_dump($value->MENU_ORDER); */
-				if(strlen($value->MENU_ORDER) == 2){
-					$r_order = $value->MENU_ORDER;
-					//var_dump(strlen($r_order));
-				}else{
-					$r_order = substr($value->MENU_ORDER, 2, 2);
-					//var_dump($r_order);
-				}
-				
-				//var_dump($r_order);
-				
-				if(substr($r_order, 0, 1) == '0'){
-					$r_order = substr($r_order, 1, 1);
-				}
-				
-				//var_dump($r_order);
+				$r_menuname = $value->MENU_ID;
+				$r_rolename = $value->ROLE_ID;				
 			}
 			
-			$parent = array();
-			$data = $this->menu_model->get_parent();
-			
+			$menu_name = array();
+			$filter = array();
+			$filter[] = " A.STATUS = '1'";
+			$data = $this->menu_model->get($filter);
 			if (empty($data)) {
-				//$parent[] = (object) array('label'=>'No Data', 'value'=>'nodata');
+				
 			} else {
 				foreach ($data as $value) {
-					$parent[] = (object) array('label'=>$value->MENU_NAME, 'value'=>$value->ID);
+					$menu_name[] = (object) array('label'=>$value->MENU_NAME, 'value'=>$value->ID);
+				}
+			}	
+			
+			$role_name = array();
+			$filter = array();
+			$filter[] = " STATUS = '1'";
+			$data = $this->role_model->get($filter);
+			if (empty($data)) {
+				
+			} else {
+				foreach ($data as $value) {
+					$role_name[] = (object) array('label'=>$value->ROLE_NAME, 'value'=>$value->ID);
 				}
 			}
 			
@@ -484,44 +343,21 @@ class Assignmenu extends CI_Controller {
 				'classes' 	=> '',
 			);				
 			$fields[] = (object) array(
-				'type' 			=> 'text',
-				'label' 		=> 'Name',
-				'name' 			=> 'name',
-				'placeholder'	=> 'menu name',
-				'value' 		=> $r_nama,
-				'classes' 		=> '',
-			);
-			$fields[] = (object) array(
-				'type' 			=> 'text',
-				'label' 		=> 'Permalink',
-				'name' 			=> 'permalink',
-				'placeholder'	=> 'example : employee, #',
-				'value' 		=> $r_permalink,
-				'classes' 		=> '',
-			);
-			$fields[] = (object) array(
-				'type' 			=> 'text',
-				'label' 		=> 'Icon',
-				'name' 			=> 'icon',
-				'placeholder'	=> 'use fontawesome, example : plus, minus',
-				'value' 		=> $r_icon,
-				'classes' 		=> '',
-			);
-			$fields[] = (object) array(
-				'type' 			=> 'text',
-				'label' 		=> 'Order',
-				'name' 			=> 'order',
-				'placeholder'	=> 'please input number (integer) start from 1',
-				'value' 		=> $r_order,
+				'type' 			=> 'select',
+				'label' 		=> 'Menu name',
+				'name' 			=> 'menu name',
+				'placeholder'	=> '--Select Menu--',
+				'value' 		=> $r_menuname,
+				'options'		=> $menu_name,
 				'classes' 		=> '',
 			);			
 			$fields[] = (object) array(
 				'type' 			=> 'select',
-				'label' 		=> 'Parent menu',
-				'name' 			=> 'parent',
-				'placeholder'	=> '--Select Parent--',
-				'value' 		=> $r_parent,
-				'options'		=> $parent,
+				'label' 		=> 'Role Name',
+				'name' 			=> 'role_name',
+				'placeholder'	=> '--Select Role--',
+				'value' 		=> $r_rolename,
+				'options'		=> $role_name,
 				'classes' 		=> '',
 			);		
 
@@ -530,41 +366,25 @@ class Assignmenu extends CI_Controller {
 				'classes'  	=> '',
 				'fields'  	=> $fields,
 			);	
-			echo json_encode($this->data['insert']);
+			echo json_encode($this->data['insert']);				
+				
 		}
 	}
 	
 	public function update_status(){
-		if(isset($_POST['id']) and $_POST['id'] != null){
-			$filters = array();
-			$filters[] = "A.ID = ". $_POST['id'];
-			
-			$result = $this->menu_model->get($filters);
-			if($result != null){
-				foreach($result as $item){
-					$status = $item->STATUS;
-				}
-				if($status == '1'){
-					$new_status = '0';
-				}else if($status == '0'){
-					$new_status = '1';
-				}
-			}
-			
-			$this->data['update'] = array(
-					'STATUS' => $new_status,
-				);	
-				
-			$result = $this->menu_model->update($this->data['update'], $_POST['id']);
-			echo json_encode($result);	
-		}
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}	
 	}
 	
 	public function delete(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}			
 		$this->data['delete'] = array(
 				'ID' => $_POST['id'],
 			);		
-		$result = $this->menu_model->delete($this->data['delete']);
+		$result = $this->assignmenu_model->delete($this->data['delete']);
 		echo json_encode($result);		
 	}
 	

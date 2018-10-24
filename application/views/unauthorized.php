@@ -22,59 +22,15 @@
 
 	<div class="row">
 		<div class="col-md-4">
-			<div class="row nav-tab">
-				<div class="col-md-6 text-center">
-					<a href="#" class="button-login btn btn-outline-primary active" role="button">LOGIN</a>
-				</div>
-				<div class="col-md-6 text-center">
-					<a href="#" class="button-register btn btn-outline-primary" role="button">REGIS</a>
-				</div>				
-			</div>
 			<div class="login-sec">
-				<h2 class="text-center">Login Now</h2>
-				<form action="" class="login-form" method="post">
-				  <div class="form-group">
-					<label for="exampleInputEmail1" class="text-uppercase">Username</label>
-					<input name="username" type="text" class="form-control" placeholder="" required>
-				  </div>
-				  <div class="form-group">
-					<label for="exampleInputPassword1" class="text-uppercase">Password</label>
-					<input name="password" type="password" class="form-control" placeholder="" required>
-				  </div>
-				  
-				  
-				  <div class="form-check">
-					<label class="form-check-label">
-					  <input type="checkbox" class="form-check-input">
-					  <small>Remember Me</small>
-					</label>
-					<button type="submit" id="login-submit" name="login-submit" class="btn btn-login float-right">Submit</button>
-				  </div>
-				</form>
-				<div class="copy-text">Created with <i class="fa fa-heart"></i> by <a href="http://omyudi.com">OmYudi.com</a></div>
+				<h2 class="text-center">OOPS</h2>
+				<div class="text-center text-second">401</div>
+				<div class="text-center">The page you have requested can't authorized your credential.</div><br>
+				<div class="text-center">
+					<a href="<?php echo base_url(); ?>" class="btn btn-lg btn-info"><i class="fa fa-home"></i>  GO HOME</a>
+				</div>
+				<div class="copy-text text-center">Created with <i class="fa fa-heart"></i> by <a href="http://omyudi.com">OmYudi.com</a></div>
 			</div>		
-		
-			<div class="register-sec">
-				<h2 class="text-center">Register Now</h2>
-				<form class="register-form" method="post">
-				  <div class="form-group">
-					<label for="exampleInputEmail1" class="text-uppercase">Username</label>
-					<input name="username" type="text" class="form-control" placeholder="" required>
-				  </div>
-				  <div class="form-group">
-					<label for="exampleInputPassword1" class="text-uppercase">Password</label>
-					<input name="password" type="password" class="form-control" placeholder="" required>
-				  </div>
-				  <div class="form-group">
-					<label for="exampleInputPassword1" class="text-uppercase">Repeat Password</label>
-					<input name="password_r" type="password" class="form-control" placeholder="" required>
-				  </div>			  
-				  <div class="form-check">
-					<button type="submit" name="register-submit" class="btn btn-login float-right">Submit</button>
-				  </div>
-				</form>
-				<div class="copy-text">Created with <i class="fa fa-heart"></i> by <a href="http://omyudi.com">OmYudi.com</a></div>
-			</div>
 		</div>
 		
 		

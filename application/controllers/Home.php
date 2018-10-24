@@ -13,8 +13,8 @@ class Home extends CI_Controller {
 		$this->load->model('user_model');
 		$this->load->model('role_model');
 		$this->load->model('menu_model');
-		$this->data['menu'] = $this->menu_model->get_menu();
-		$this->data['sub_menu'] = $this->menu_model->get_sub_menu();		
+		$this->data['menu'] = $this->menu_model->get_menu($this->session->userdata('ROLE_ID'));
+		$this->data['sub_menu'] = $this->menu_model->get_sub_menu($this->session->userdata('ROLE_ID'));		
 		$this->data['error'] = array();
 		$this->data['title'] = 'Home';
 	}

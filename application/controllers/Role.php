@@ -6,18 +6,22 @@ class Role extends CI_Controller {
 	
 	public function __construct(){
 		parent::__construct();
-		$this->load->library('session');		
+		$this->load->library('session');
+		$this->load->library('auth');		
 		$this->load->helper('url');			
 		$this->load->database();
 		$this->load->model('role_model');
 		$this->load->model('menu_model');
-		$this->data['menu'] = $this->menu_model->get_menu();
-		$this->data['sub_menu'] = $this->menu_model->get_sub_menu();		
+		$this->data['menu'] = $this->menu_model->get_menu($this->session->userdata('ROLE_ID'));
+		$this->data['sub_menu'] = $this->menu_model->get_sub_menu($this->session->userdata('ROLE_ID'));			
 		$this->data['error'] = array();
 		$this->data['title'] = 'Role';
 	}
 
 	public function index(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}			
 		$this->data['subtitle'] = 'List';
 		$this->data['class'] = __CLASS__;
 		$this->load->view('section_header', $this->data);
@@ -27,6 +31,9 @@ class Role extends CI_Controller {
 	}
 	
 	public function list(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}				
 		$filters = array();
 		$limit = array('10', '0');
 		$r_nama = '';
@@ -125,6 +132,9 @@ class Role extends CI_Controller {
 	}
 	
 	public function insert(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}				
 		if(isset($_POST['submit'])){
 			//validation
 			$error_info = array();
@@ -181,6 +191,9 @@ class Role extends CI_Controller {
 	}
 	
 	public function update(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}				
 		if(isset($_POST['submit'])){
 			//validation
 			$error_info = array();
@@ -218,10 +231,6 @@ class Role extends CI_Controller {
 		}else{
 			$r_id = '';
 			$r_nama = '';
-			$r_permalink = '';
-			$r_icon = '';
-			$r_order = '';
-			$r_parent = '';
 			
 			$filter = array();
 			$filter[] = "ID = ". $_POST['id'];
@@ -259,6 +268,9 @@ class Role extends CI_Controller {
 	}
 	
 	public function update_status(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}		
 		if(isset($_POST['id']) and $_POST['id'] != null){
 			$filters = array();
 			$filters[] = "ID = ". $_POST['id'];
@@ -285,6 +297,9 @@ class Role extends CI_Controller {
 	}
 	
 	public function delete(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}				
 		$this->data['delete'] = array(
 				'ID' => $_POST['id'],
 			);		

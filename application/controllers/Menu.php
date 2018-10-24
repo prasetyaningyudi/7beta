@@ -6,17 +6,21 @@ class Menu extends CI_Controller {
 	
 	public function __construct(){
 		parent::__construct();
-		$this->load->library('session');		
+		$this->load->library('session');
+		$this->load->library('auth');			
 		$this->load->helper('url');			
 		$this->load->database();
 		$this->load->model('menu_model');
-		$this->data['menu'] = $this->menu_model->get_menu();
-		$this->data['sub_menu'] = $this->menu_model->get_sub_menu();		
+		$this->data['menu'] = $this->menu_model->get_menu($this->session->userdata('ROLE_ID'));
+		$this->data['sub_menu'] = $this->menu_model->get_sub_menu($this->session->userdata('ROLE_ID'));		
 		$this->data['error'] = array();
 		$this->data['title'] = 'Menu';
 	}
 
 	public function index(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}		
 		$this->data['subtitle'] = 'List';
 		$this->data['class'] = __CLASS__;
 		$this->load->view('section_header', $this->data);
@@ -26,10 +30,14 @@ class Menu extends CI_Controller {
 	}
 	
 	public function list(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}		
 		$filters = array();
 		$limit = array('10', '0');
 		$r_nama = '';
 		$r_parent = '';
+		$r_order = '';
 		$r_status = '';
 
 		//var_dump($_POST['nama']);
@@ -52,6 +60,12 @@ class Menu extends CI_Controller {
 					$r_status = $_POST['status'];
 				}
 			}
+			if (isset($_POST['order'])) {
+				if ($_POST['order'] != '' or $_POST['order'] != null) {
+					$filters[] = "A.MENU_ORDER LIKE '" . $_POST['order'] . "%'";
+					$r_order = $_POST['order'];
+				}
+			}			
 			if (isset($_POST['offset'])) {
 				if ($_POST['offset'] != '' or $_POST['offset'] != null) {
 					$limit[1] = $_POST['offset'];
@@ -109,7 +123,7 @@ class Menu extends CI_Controller {
 		$data = $this->menu_model->get_parent();
 		
 		if (empty($data)) {
-			//$parent[] = (object) array('label'=>'No Data', 'value'=>'nodata');
+			
 		} else {
 			foreach ($data as $value) {
 				$parent[] = (object) array('label'=>$value->MENU_NAME, 'value'=>$value->ID);
@@ -125,6 +139,14 @@ class Menu extends CI_Controller {
 			'value' 		=> $r_nama,
 			'classes' 		=> '',
 		);
+		$fields[] = (object) array(
+			'type' 			=> 'text',
+			'label' 		=> 'Menu Order',
+			'name' 			=> 'order',
+			'placeholder'	=> 'Input order like',
+			'value' 		=> $r_order,
+			'classes' 		=> '',
+		);			
 		$fields[] = (object) array(
 			'type' 			=> 'text',
 			'label' 		=> 'Status',
@@ -161,6 +183,9 @@ class Menu extends CI_Controller {
 	}
 	
 	public function insert(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}		
 		if(isset($_POST['submit'])){
 			//validation
 			$error_info = array();
@@ -328,6 +353,9 @@ class Menu extends CI_Controller {
 	}
 	
 	public function update(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}		
 		if(isset($_POST['submit'])){
 			//validation
 			$error_info = array();
@@ -438,30 +466,21 @@ class Menu extends CI_Controller {
 			$filter = array();
 			$filter[] = "A.ID = ". $_POST['id'];
 			$this->data['result'] = $this->menu_model->get($filter);
-			//var_dump($this->data['result']);
 			foreach($this->data['result'] as $value){
 				$r_id 	= $value->ID;
 				$r_nama = $value->MENU_NAME;
 				$r_permalink = $value->PERMALINK;
 				$r_icon = $value->MENU_ICON;
 				$r_parent = $value->MENU_ID;
-/* 				var_dump(strlen($value->MENU_ORDER));
-				var_dump($value->MENU_ORDER); */
 				if(strlen($value->MENU_ORDER) == 2){
 					$r_order = $value->MENU_ORDER;
-					//var_dump(strlen($r_order));
 				}else{
 					$r_order = substr($value->MENU_ORDER, 2, 2);
-					//var_dump($r_order);
 				}
-				
-				//var_dump($r_order);
 				
 				if(substr($r_order, 0, 1) == '0'){
 					$r_order = substr($r_order, 1, 1);
 				}
-				
-				//var_dump($r_order);
 			}
 			
 			$parent = array();
@@ -535,6 +554,9 @@ class Menu extends CI_Controller {
 	}
 	
 	public function update_status(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}		
 		if(isset($_POST['id']) and $_POST['id'] != null){
 			$filters = array();
 			$filters[] = "A.ID = ". $_POST['id'];
@@ -561,6 +583,9 @@ class Menu extends CI_Controller {
 	}
 	
 	public function delete(){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+			redirect ('authentication/unauthorized');
+		}		
 		$this->data['delete'] = array(
 				'ID' => $_POST['id'],
 			);		

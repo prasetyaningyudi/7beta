@@ -342,9 +342,17 @@ padding : 150px 0 0 0;
 .banner-sec{background:#fff; min-height:500px; border-radius: 0 10px 10px 0; padding:0;}
 .carousel-inner{border-radius:0 10px 10px 0;}
 .carousel-caption{text-align:left; left:5%;}
+.text-second{
+	font: bold 120px arial, sans-serif;
+	background-color: #565656;
+	color: transparent;
+	text-shadow: 2px 2px 3px rgba(255,255,255,0.5);
+	-webkit-background-clip: text;
+    -moz-background-clip: text;
+    background-clip: text;}
 .register-sec{display:none;}
 .register-sec, .login-sec{padding: 50px 10px; position:relative;width:100%;height:100%;}
-.register-sec .copy-text, .login-sec .copy-text{position:absolute; width:80%; bottom:50px; font-size:13px; text-align:center;}
+.register-sec .copy-text, .login-sec .copy-text{position:absolute; width:90%; bottom:50px; font-size:13px; text-align:center;}
 .register-sec .copy-text i, .login-sec .copy-text i{color:#FEB58A;}
 .register-sec .copy-text a, .login-sec .copy-text a{color:#E36262;}
 .register-sec h2, .login-sec h2{margin-bottom:30px; font-weight:800; font-size:30px; color: #DE6262;}

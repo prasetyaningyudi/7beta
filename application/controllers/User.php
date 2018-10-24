@@ -13,14 +13,14 @@ class User extends CI_Controller {
 		$this->load->model('user_model');
 		$this->load->model('role_model');
 		$this->load->model('menu_model');
-		$this->data['menu'] = $this->menu_model->get_menu();
-		$this->data['sub_menu'] = $this->menu_model->get_sub_menu();		
+		$this->data['menu'] = $this->menu_model->get_menu($this->session->userdata('ROLE_ID'));
+		$this->data['sub_menu'] = $this->menu_model->get_sub_menu($this->session->userdata('ROLE_ID'));		
 		$this->data['error'] = array();
 		$this->data['title'] = 'User';
 	}
 
 	public function index(){
-		var_dump($this->auth->getPermission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ));
+		var_dump($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ));
 /* 		if($this->auth->getPermission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
 			redirect ('home');
 		} */
@@ -33,7 +33,7 @@ class User extends CI_Controller {
 	}
 	
 	public function list(){
-		if($this->auth->getPermission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
 			redirect ('home');
 		}
 		$filters = array();
@@ -184,7 +184,7 @@ class User extends CI_Controller {
 	}
 	
 	public function insert(){
-		if($this->auth->getPermission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
+		if($this->auth->get_permission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
 			redirect ('home');
 		}		
 		if(isset($_POST['submit'])){
@@ -552,12 +552,14 @@ class User extends CI_Controller {
 	public function delete(){
 		if($this->auth->getPermission($this->session->userdata('ROLE_NAME'), __CLASS__ , __FUNCTION__ ) == false){
 			redirect ('home');
+		}
+		if(isset($_POST['id']) and $_POST['id'] != null){		
+			$this->data['delete'] = array(
+					'ID' => $_POST['id'],
+				);		
+			$result = $this->user_model->delete($this->data['delete']);
+			echo json_encode($result);
 		}		
-		$this->data['delete'] = array(
-				'ID' => $_POST['id'],
-			);		
-		$result = $this->user_model->delete($this->data['delete']);
-		echo json_encode($result);		
 	}
 	
 }

@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Menu_model extends CI_Model {
 	
 	private $_table1 = "menu";
+	private $_table2 = "role_menu";
 
     public function __construct(){
 		parent::__construct();
@@ -40,19 +41,24 @@ class Menu_model extends CI_Model {
 		return $result;
 	}
 
-	public function get_menu(){
-		$sql = "SELECT * FROM " . $this->_table1;
-		$sql .= " WHERE MENU_ID IS NULL AND STATUS = '1'";
+	public function get_menu($role){
+		$sql = "SELECT B.* FROM " . $this->_table2 . " A";
+		$sql .= " LEFT JOIN " . $this->_table1 . " B ";
+		$sql .= " ON A.MENU_ID = B.ID ";
+		$sql .= " WHERE B.MENU_ID IS NULL AND B.STATUS = '1' AND A.ROLE_ID = '" . $role . "'";
 		$sql .= " ORDER BY MENU_ORDER ASC";		
 		$query = $this->db->query($sql);
 		$result = $query->result();
 		return $result;		
 	}
 	
-	public function get_sub_menu(){
-		$sql = "SELECT * FROM " . $this->_table1;
-		$sql .= " WHERE MENU_ID IS NOT NULL AND STATUS = '1'";
-		$sql .= " ORDER BY MENU_ORDER ASC";			
+	public function get_sub_menu($role){
+		$sql = "SELECT B.* FROM " . $this->_table2 . " A";
+		$sql .= " LEFT JOIN " . $this->_table1 . " B ";
+		$sql .= " ON A.MENU_ID = B.ID ";
+		$sql .= " WHERE B.MENU_ID IS NOT NULL AND B.STATUS = '1' AND A.ROLE_ID = '" . $role . "'";
+		$sql .= " ORDER BY MENU_ORDER ASC";
+		//var_dump($sql);die;		
 		$query = $this->db->query($sql);
 		$result = $query->result();
 		return $result;		

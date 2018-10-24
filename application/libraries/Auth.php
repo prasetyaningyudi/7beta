@@ -6,23 +6,12 @@ class Auth{
 	private $_role_permission;
 	
 	public function __construct(){
-		$this->_role_permission = array(
-			'administrator' => array (
-				'home' => array ('index', 'list', 'insert', 'update', 'update_status', 'delete'),
-				'user' => array ('index', 'list', 'insert', 'update', 'update_status'),
-			),
-			'supervisor' => array (
-				'menu' => array ('index', 'list', 'insert', 'update', 'update_status', 'delete'),
-				'user' => array ('index', 'list', 'insert', 'update', 'update_status', 'delete'),		
-			),
-			'operator' => array (
-				'menu' => array ('index', 'list', 'insert', 'update', 'update_status', 'delete'),
-				'user' => array ('index', 'list', 'insert', 'update', 'update_status', 'delete'),	
-			),	
-		);
+		require_once('Permission.php');
+		$this->_role_permission = $roles;
+		//var_dump($this->_role_permission);
 	}
 	
-	public function getPermission($role, $menu, $submenu){
+	public function get_permission($role, $menu, $submenu){
 		$mymenu = mb_strtolower($menu);
 		$mysubmenu = mb_strtolower($submenu);
 		$exist = false;

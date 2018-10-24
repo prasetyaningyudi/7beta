@@ -78,5 +78,12 @@ class Authentication extends CI_Controller {
 	public function logout(){	
 		$this->session->sess_destroy();
 		redirect('authentication');
-	}		
+	}
+
+	public function unauthorized(){
+		$this->data['subtitle'] = 'Unauthorized Access';
+		$this->data['class'] = __CLASS__;		
+		$this->load->view('section_header', $this->data);
+		$this->load->view('unauthorized');			
+	}
 }
