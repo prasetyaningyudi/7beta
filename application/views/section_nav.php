@@ -1,6 +1,6 @@
 	<div class="header">
 		<div class="logo">
-			<a href="<?php base_url(); ?>">
+			<a href="<?php echo base_url(); ?>">
 			<i class="fa fa-tachometer"></i>
 			<span>7Beta</span>
 			</a>
@@ -27,7 +27,7 @@
 	</div>
 	<div class="side-nav">
 		<div class="logo">
-			<a href="<?php base_url(); ?>">
+			<a href="<?php echo base_url(); ?>">
 			<i class="fa fa-tachometer"></i>
 			<span>7Beta</span>
 			</a>
