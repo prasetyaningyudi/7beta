@@ -1,7 +1,9 @@
 	<div class="header">
 		<div class="logo">
+			<a href="<?php base_url(); ?>">
 			<i class="fa fa-tachometer"></i>
 			<span>7Beta</span>
+			</a>
 		</div>
 		<a href="#" class="nav-trigger"><span>
 		</span></a>
@@ -25,8 +27,10 @@
 	</div>
 	<div class="side-nav">
 		<div class="logo">
+			<a href="<?php base_url(); ?>">
 			<i class="fa fa-tachometer"></i>
 			<span>7Beta</span>
+			</a>
 		</div>
 		<nav>
 			<ul>

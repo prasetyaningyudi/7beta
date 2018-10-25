@@ -19,6 +19,9 @@ class Authentication extends CI_Controller {
 	}
 	
 	public function login(){
+		if($this->session->userdata('is_logged_in') == 1){
+			redirect ('authentication/unauthorized');
+		}
 		if(isset($_POST['login-submit'])){
 			$error_info = array();
 			$error_status = false;			
