@@ -20,15 +20,24 @@
 			<div class="col-6 text-right font-weight-bold">
 				<div class="filters">
 	
-				</div>		
-			
+				</div>	
+				
+				<div class="insert">
+					<div class="button-pdf button-toolbar" id="button-pdf" style="float:right;text-align:center;font-size:15px">
+					<a href="javascript:void(0);" data-toggle="modal" data-target="#modal-add" title="add">
+						<i style="font-size: 16px;" class="fas fa-file-pdf"></i><br>PDF
+					</a>
+					</div>			
+				</div>
+				
 				<div class="insert">
 					<div class="button-input button-toolbar" id="button-input" style="float:right;text-align:center;font-size:15px">
 					<a href="javascript:void(0);" data-toggle="modal" data-target="#modal-add" title="add">
 						<i style="font-size: 16px;" class="fa fa-plus"></i><br>ADD
 					</a>
 					</div>			
-				</div>			
+				</div>				
+						
 			</div>	
 		</div>	
 		</div>

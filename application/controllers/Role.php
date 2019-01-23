@@ -35,7 +35,7 @@ class Role extends CI_Controller {
 			redirect ('authentication/unauthorized');
 		}				
 		$filters = array();
-		$limit = array('10', '0');
+		$limit = array('2', '0');
 		$r_nama = '';
 		$r_status = '';
 
@@ -127,8 +127,13 @@ class Role extends CI_Controller {
 			'header'  	=> $header,
 			'body'  	=> $body,
 			'footer'  	=> null,
-		);		
-		echo json_encode($this->data['list']);
+		);
+
+		if(isset($_POST['generate_output'])){
+			
+		}else{
+			echo json_encode($this->data['list']);
+		}
 	}
 	
 	public function insert(){
